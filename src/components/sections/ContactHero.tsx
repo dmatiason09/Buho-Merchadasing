@@ -59,7 +59,6 @@ const FAQ_ITEMS: Array<{ q: string; a: string }> = [
 const COLOR_BG = "#EFE8D6";                           // crema/beige cálido del fondo
 const COLOR_FG = "#0A0A0A";                           // negro casi puro para textos pequeños
 const COLOR_BIG = "#929292";                          // gris medio de las palabras grandes
-const COLOR_ACCENT = "#FF5C2F";                       // naranja "GET IN TOUCH"
 const COLOR_MUTED = "rgba(10, 10, 10, 0.55)";          // labels EMAIL/PHONE/BASED
 const COLOR_RULE = "rgba(10, 10, 10, 0.14)";           // separadores
 
