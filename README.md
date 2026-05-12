@@ -49,9 +49,7 @@ aymacode/
 │   │   ├── forms/           ← ContactForm (con RHF + Zod)
 │   │   └── ui/              ← Botones, inputs reutilizables (futuro)
 │   │
-│   ├── hooks/
-│   │   ├── useScrollFade.ts ← Fade del matrix al hacer scroll
-│   │   └── useWordReveal.ts ← Reveal palabra por palabra
+│   │                        (hooks específicos: viven inline en cada sección)
 │   │
 │   ├── lib/
 │   │   ├── api-client.ts    ← ⭐ Cliente HTTP centralizado
@@ -121,11 +119,15 @@ Este patrón se replica para CADA feature futura: blog, casos de estudio, suscri
 
 ## 📋 Roadmap
 
-- [x] Hero con Spline 3D + matrix canvas
+- [x] Hero con Spline 3D
 - [x] About con word reveal
+- [x] HandsSection (frame-by-frame scrub)
+- [x] BentoGallery (GSAP Flip + scrub sincronizado con frames de laptop)
 - [x] Formulario de contacto con validación
 - [x] API Route para recibir leads
-- [ ] Sección de servicios (3 modalidades de páginas web)
+- [x] Página /servicios (Hero + Manifesto + Lista interactiva)
+- [x] Página /contacto (Hero + form sticky + FAQ)
+- [ ] Página /portafolio (link en navbar ya existe, ruta pendiente)
 - [ ] Sección de ERPs
 - [ ] Sección de automatizaciones n8n
 - [ ] CMS para casos de estudio (Sanity)
