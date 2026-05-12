@@ -14,7 +14,6 @@ function frameUrl(index: number) {
 
 export function HandsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const stickyRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const framesRef = useRef<HTMLImageElement[]>([]);
   const stateRef = useRef({ frame: 0 });
