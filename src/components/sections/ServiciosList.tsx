@@ -1,6 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * ServiciosList — réplica del interactive list de studionamma.com.
@@ -54,9 +58,42 @@ const COLOR_TEXT_DIM = "#D6D6D6";
 
 export function ServiciosList() {
   const [hovered, setHovered] = useState<number | null>(null);
+  const rootRef = useRef<HTMLElement>(null);
+
+  // Masked-lines reveal: cada palabra sube desde abajo con mascara (overflow:hidden
+  // en el <li>) y stagger entre palabras. Tecnica del demo "masked-lines-with-splittext"
+  // de codepen. No necesita SplitText porque cada palabra ya es un <span> separado:
+  // basta con animar yPercent dentro de un wrapper con overflow oculto.
+  // Se dispara con ScrollTrigger cuando la seccion entra al viewport.
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const words = root.querySelectorAll<HTMLElement>(".sl-word");
+
+    gsap.set(words, { yPercent: 110, opacity: 0 });
+
+    const tween = gsap.to(words, {
+      yPercent: 0,
+      opacity: 1,
+      duration: 0.9,
+      stagger: 0.12,
+      ease: "expo.out",
+      scrollTrigger: {
+        trigger: root,
+        start: "top 75%",
+        once: true,
+      },
+    });
+
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+    };
+  }, []);
 
   return (
     <section
+      ref={rootRef}
       data-nav-theme="light"
       className="sl-section relative w-full"
       style={{
@@ -128,6 +165,7 @@ export function ServiciosList() {
               alignItems: "center",
               justifyContent: "center",
               cursor: "default",
+              overflow: "hidden",
             }}
           >
             <span
