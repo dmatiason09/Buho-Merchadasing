@@ -157,7 +157,18 @@ export function ServiciosList() {
                 pointerEvents: "none",
                 zIndex: 0,
                 opacity: hovered === i ? 1 : 0,
-                transition: "opacity 0.3s ease",
+                // Clip-path reveal desde el centro: la imagen se "abre"
+                // desde la mitad horizontal hacia arriba y abajo.
+                // 'inset(top right bottom left)' — 50% top/bottom = colapsada
+                // a una linea en el centro. 0 = totalmente abierta.
+                // El 'round 4px' preserva el border-radius durante el reveal.
+                clipPath:
+                  hovered === i
+                    ? "inset(0% 0% 0% 0% round 4px)"
+                    : "inset(50% 0% 50% 0% round 4px)",
+                transition:
+                  "clip-path 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease",
+                willChange: "clip-path, opacity",
               }}
             />
 
