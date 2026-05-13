@@ -250,7 +250,7 @@ export function ServiciosManifesto() {
           alt=""
           style={{
             position: "absolute",
-            top: "42%",
+            top: "50%",
             left: "87%",
             width: "18vw",
             height: "24vw",
