@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
  * ServiciosManifesto — sección manifesto estilo detroit.paris/services.
  *
  * MECÁNICA actual (2 imágenes, vamos agregando una por una):
- *   - Sección de calc(100vh + 2250px) — sticky 100vh + runway 2250px (= 25 scrolls)
+ *   - Sección de calc(100vh + 1890px) — sticky 100vh + runway 1890px (= 21 scrolls)
  *   - Wrapper sticky: el texto del manifesto queda fijo en el viewport
  *   - Cada imagen tiene su PROPIO ScrollTrigger con start/end en pixeles
  *     absolutos. Cálculo: ~90px por scroll de mouse wheel (con Lenis
@@ -23,12 +23,12 @@ gsap.registerPlugin(ScrollTrigger);
  *       FASE 2 (70% → 100%): fade out + sigue agrandando hasta desaparecer
  *
  *   - IMAGEN 2 (derecha, top:42% left:87% — espejo de la 1):
- *       Scroll range: 360px → 2250px del top (= scrolls 4 a 25; total 21 scrolls).
+ *       Scroll range: 360px → 1890px del top (= scrolls 4 a 21; total 17 scrolls).
  *       Estado inicial: invisible (scale 0 + opacity 0)
- *       FASE 1 (0% → 57% del propio scroll = scrolls 4 a 16): aparece de
+ *       FASE 1 (0% → 70% del propio scroll = scrolls 4 a 16): aparece de
  *         la nada, crece a tamaño similar al final de img1, se enfoca,
  *         opacidad sube a 1
- *       FASE 2 (57% → 100% = scrolls 16 a 25): fade out + sigue agrandando
+ *       FASE 2 (70% → 100% = scrolls 16 a 21): fade out + sigue agrandando
  *
  * Próximas imágenes se siguen agregando aquí, una por una.
  */
@@ -133,37 +133,38 @@ export function ServiciosManifesto() {
       tl2 = gsap.timeline({
         scrollTrigger: {
           trigger: section,
-          start: "top top-=360", // 4 scrolls × 90px = 360px
-          end: "+=1890",         // duracion = 21 scrolls × 90px (termina en scroll 25)
+          start: "top top-=360", // scroll 4 × 90px = 360px
+          end: "+=1530",         // duracion 17 scrolls × 90px (termina en scroll 21)
           scrub: 0.6,
         },
       });
 
-      // IMG2 FASE 1 (0% → 57% de su scroll ≈ scrolls 4 a 16): aparece de la
+      // IMG2 FASE 1 (0% → 70% de su scroll ≈ scrolls 4 a 16): aparece de la
       // nada, crece a tamano similar al final de img1, se enfoca, opacidad
-      // sube a 1.
+      // sube a 1. 12 de los 17 scrolls = ~70%.
       tl2.to(
         image2,
         {
           scale: 1.15,
           filter: "blur(0px)",
           opacity: 1,
-          duration: 0.57,
+          duration: 0.7,
           ease: "power2.inOut",
         },
         0
       );
 
-      // IMG2 FASE 2 (57% → 100% ≈ scrolls 16 a 25): fade out + crece un toque mas
+      // IMG2 FASE 2 (70% → 100% ≈ scrolls 16 a 21): fade out + crece un toque mas.
+      // 5 de los 17 scrolls = ~30%.
       tl2.to(
         image2,
         {
           scale: 1.25,
           opacity: 0,
-          duration: 0.43,
+          duration: 0.3,
           ease: "power2.in",
         },
-        0.57
+        0.7
       );
     }
 
@@ -190,13 +191,13 @@ export function ServiciosManifesto() {
       style={{
         backgroundColor: COLOR_BG,
         color: COLOR_FG,
-        // height = 100vh del sticky + 2250px de "scroll runway".
-        // 2250px = 25 scrolls × 90px (con Lenis wheelMultiplier:0.9 y
-        // 100px delta nativo de Windows). Es el scroll-25, donde la
+        // height = 100vh del sticky + 1890px de "scroll runway".
+        // 1890px = 21 scrolls × 90px (con Lenis wheelMultiplier:0.9 y
+        // 100px delta nativo de Windows). Es el scroll-21, donde la
         // segunda imagen termina de desvanecerse. Img1 termina antes,
         // en el scroll-16, pero el sticky tiene que aguantar hasta el
         // final de img2.
-        height: "calc(100vh + 2250px)",
+        height: "calc(100vh + 1890px)",
       }}
     >
       <div
