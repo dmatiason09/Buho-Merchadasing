@@ -102,44 +102,9 @@ export function ServiciosList() {
         padding: "12vh 0",
       }}
     >
-      {/* Media preview a la izquierda — solo visible cuando hay hover */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          left: "3vw",
-          top: "50%",
-          transform: "translateY(-50%)",
-          width: "22vw",
-          maxWidth: "320px",
-          aspectRatio: "4 / 3",
-          overflow: "hidden",
-          borderRadius: "4px",
-          pointerEvents: "none",
-          zIndex: 2,
-          opacity: hovered !== null ? 1 : 0,
-          transition: "opacity 0.3s ease",
-        }}
-      >
-        {SERVICES.map((s, i) => (
-          <img
-            key={s.word}
-            src={s.image}
-            alt=""
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              opacity: hovered === i ? 1 : 0,
-              transition: "opacity 0.3s ease",
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Lista de palabras grandes */}
+      {/* Lista de palabras grandes — cada <li> incluye su propia imagen
+          preview al costado izquierdo, posicionada a la altura vertical
+          de SU palabra (no centrada en la seccion entera). */}
       <ul
         className="sl-list"
         style={{
@@ -165,28 +130,71 @@ export function ServiciosList() {
               alignItems: "center",
               justifyContent: "center",
               cursor: "default",
-              overflow: "hidden",
+              // overflow:hidden YA NO va aqui — clippearia la imagen.
+              // La mascara del masked-lines vive ahora en un wrapper
+              // interno alrededor solo de la palabra (mas abajo).
             }}
           >
-            <span
-              className="sl-word"
+            {/* Imagen preview a la altura de ESTA palabra (left de la pagina).
+                pointerEvents:none + zIndex bajo para que el hover sobre el
+                <li> siga funcionando y la palabra renderice encima si llega
+                a haber overlap (palabras largas como AUTOMATIZACIONES). */}
+            <img
+              src={s.image}
+              alt=""
+              aria-hidden="true"
+              draggable={false}
               style={{
-                fontFamily:
-                  'var(--font-anton), "Anton", "Impact", "Arial Narrow", sans-serif',
-                fontSize: "clamp(64px, 11vw, 220px)",
+                position: "absolute",
+                left: "3vw",
+                top: "50%",
+                transform: "translateY(-50%)",
+                width: "22vw",
+                maxWidth: "320px",
+                aspectRatio: "4 / 3",
+                objectFit: "cover",
+                borderRadius: "4px",
+                pointerEvents: "none",
+                zIndex: 0,
+                opacity: hovered === i ? 1 : 0,
+                transition: "opacity 0.3s ease",
+              }}
+            />
+
+            {/* Mascara overflow:hidden alrededor de la palabra solamente.
+                El masked-lines reveal mueve .sl-word con yPercent y este
+                wrapper lo clippea. Position:relative + zIndex 1 garantiza
+                que la palabra quede SIEMPRE encima de la imagen. */}
+            <span
+              style={{
+                position: "relative",
+                zIndex: 1,
+                display: "inline-block",
+                overflow: "hidden",
                 lineHeight: 0.95,
-                fontWeight: 400,
-                letterSpacing: "-0.01em",
-                textTransform: "uppercase",
-                color:
-                  hovered === null || hovered === i
-                    ? COLOR_TEXT_ACTIVE
-                    : COLOR_TEXT_DIM,
-                transition: "color 0.25s ease",
-                whiteSpace: "nowrap",
               }}
             >
-              {s.word}
+              <span
+                className="sl-word"
+                style={{
+                  display: "inline-block",
+                  fontFamily:
+                    'var(--font-anton), "Anton", "Impact", "Arial Narrow", sans-serif',
+                  fontSize: "clamp(64px, 11vw, 220px)",
+                  lineHeight: 0.95,
+                  fontWeight: 400,
+                  letterSpacing: "-0.01em",
+                  textTransform: "uppercase",
+                  color:
+                    hovered === null || hovered === i
+                      ? COLOR_TEXT_ACTIVE
+                      : COLOR_TEXT_DIM,
+                  transition: "color 0.25s ease",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {s.word}
+              </span>
             </span>
 
             {/* Tag a la derecha — solo visible cuando este item está hovereado */}
@@ -206,6 +214,7 @@ export function ServiciosList() {
                 opacity: hovered === i ? 1 : 0,
                 transition: "opacity 0.25s ease",
                 pointerEvents: "none",
+                zIndex: 2,
               }}
             >
               {s.tag}
