@@ -9,16 +9,22 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * ServiciosManifesto — sección manifesto estilo detroit.paris/services.
  *
- * MECÁNICA actual (probando UNA imagen):
+ * MECÁNICA actual (2 imágenes, vamos agregando una por una):
  *   - Sección de 200vh
  *   - Wrapper sticky: el texto del manifesto queda fijo en el viewport
- *   - 1 imagen a la izquierda que:
- *       FASE 1 (0% → 70% del scroll): aparece chica + blureada + opacity 0.5,
- *         se acerca creciendo, se va enfocando (blur → 0) y opacidad sube a 1
- *       FASE 2 (70% → 100% del scroll): fade out + sigue agrandando hasta
- *         desaparecer
  *
- * Cuando termine de probar esta imagen, agregamos las demás una por una.
+ *   - IMAGEN 1 (izquierda, top:42% left:13%):
+ *       FASE 1 (0% → 70%): aparece chica + blureada + opacity 0.55,
+ *         se acerca creciendo, se enfoca (blur → 0) y opacidad sube a 1
+ *       FASE 2 (70% → 100%): fade out + sigue agrandando hasta desaparecer
+ *
+ *   - IMAGEN 2 (derecha, top:42% left:87% — espejo de la 1):
+ *       Estado inicial: invisible (scale 0 + opacity 0)
+ *       FASE 1 (70% → 88%): aparece de la nada, crece a tamaño similar al
+ *         final de la imagen 1, se enfoca, opacidad sube a 1
+ *       FASE 2 (88% → 100%): fade out + sigue agrandando un toque
+ *
+ * Próximas imágenes se siguen agregando aquí, una por una.
  */
 
 const MANIFESTO_PRIMARY = "PRODUCCIÓN A ESCALA CON CALIDAD ARTESANAL.";
@@ -35,13 +41,19 @@ const COLOR_FG = "#0A0A0A";
 // portfolio, ésta se reemplaza.
 const TEST_IMAGE = "/images/bento/05-flatlay.png";
 
+// Segunda imagen — lado derecho. Aparece chica desde 0 al final, crece,
+// y se desaparece. Provisoria mientras probamos las animaciones.
+const TEST_IMAGE_2 = "/images/bento/06-convert.png";
+
 export function ServiciosManifesto() {
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+  const image2Ref = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     const image = imageRef.current;
+    const image2 = image2Ref.current;
     if (!section || !image) return;
 
     // Estado inicial: chica + blureada + semi-transparente
@@ -87,6 +99,51 @@ export function ServiciosManifesto() {
       0.7
     );
 
+    // ============================================================
+    // SEGUNDA IMAGEN — lado derecho. Empieza en scale 0 (invisible),
+    // aparece al final mientras la primera se desvanece, y luego se
+    // desvanece tambien. Mismo "lenguaje" de efecto que la primera
+    // (blur->focus + crecimiento + fade) pero condensado al tramo
+    // 70%-100% del scroll.
+    // ============================================================
+    if (image2) {
+      // Estado inicial: invisible (scale 0 + opacity 0) + blureada
+      gsap.set(image2, {
+        xPercent: -50,
+        yPercent: -50,
+        scale: 0,
+        filter: "blur(14px)",
+        opacity: 0,
+      });
+
+      // IMG2 FASE 1 (70% → 88% del scroll): aparece de la nada y crece
+      // a un tamano similar al final de la primera. Se enfoca y opacidad
+      // sube a 1.
+      tl.to(
+        image2,
+        {
+          scale: 1.15,
+          filter: "blur(0px)",
+          opacity: 1,
+          duration: 0.18,
+          ease: "power2.inOut",
+        },
+        0.7
+      );
+
+      // IMG2 FASE 2 (88% → 100% del scroll): un toque mas grande + fade out
+      tl.to(
+        image2,
+        {
+          scale: 1.25,
+          opacity: 0,
+          duration: 0.12,
+          ease: "power2.in",
+        },
+        0.88
+      );
+    }
+
     // Refresh tras montar para que ScrollTrigger calcule posiciones correctas
     const refreshIds = [
       window.setTimeout(() => ScrollTrigger.refresh(), 100),
@@ -130,6 +187,29 @@ export function ServiciosManifesto() {
             position: "absolute",
             top: "42%",
             left: "13%",
+            width: "18vw",
+            height: "24vw",
+            objectFit: "cover",
+            transformOrigin: "center center",
+            willChange: "transform, filter, opacity",
+            borderRadius: "6px",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        />
+
+        {/* Segunda imagen — espejo en el lado derecho. Centrada en
+            (left: 87%, top: 42%) que es el mirror de (13%, 42%).
+            Misma forma y tamano que la primera. Su animacion se define
+            en el useEffect (aparece desde scale 0 en el tramo 70-100%). */}
+        <img
+          ref={image2Ref}
+          src={TEST_IMAGE_2}
+          alt=""
+          style={{
+            position: "absolute",
+            top: "42%",
+            left: "87%",
             width: "18vw",
             height: "24vw",
             objectFit: "cover",
