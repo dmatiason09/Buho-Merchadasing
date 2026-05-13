@@ -9,26 +9,34 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * ServiciosManifesto — sección manifesto estilo detroit.paris/services.
  *
- * MECÁNICA actual (2 imágenes, vamos agregando una por una):
- *   - Sección de calc(100vh + 1890px) — sticky 100vh + runway 1890px (= 21 scrolls)
+ * MECÁNICA actual (3 imágenes, vamos agregando una por una):
+ *   - Sección de calc(100vh + 2610px) — sticky 100vh + runway 2610px (= 29 scrolls)
  *   - Wrapper sticky: el texto del manifesto queda fijo en el viewport
  *   - Cada imagen tiene su PROPIO ScrollTrigger con start/end en pixeles
  *     absolutos. Cálculo: ~90px por scroll de mouse wheel (con Lenis
  *     wheelMultiplier:0.9 y 100px delta nativo Windows).
  *
- *   - IMAGEN 1 (izquierda, top:42% left:13%):
- *       Scroll range: 0px → 1440px del top de la sección (= scrolls 0 a 16).
+ *   - IMAGEN 1 (izquierda arriba, top:42% left:13%):
+ *       Scroll range: 0 → 1440px (= scrolls 0 a 16; total 16 scrolls).
  *       FASE 1 (scrolls 0 → 12): aparece chica + blureada + opacity 0.55,
  *         se acerca creciendo, se enfoca, opacidad sube a 1
  *       FASE 2 (scrolls 12 → 16, ULTIMOS 4 SCROLLS): fade out + agranda
  *
- *   - IMAGEN 2 (derecha, top:42% left:87% — espejo de la 1):
- *       Scroll range: 360px → 1890px del top (= scrolls 4 a 21; total 17 scrolls).
+ *   - IMAGEN 2 (derecha, top:50% left:87%):
+ *       Scroll range: 360 → 1890px (= scrolls 4 a 21; total 17 scrolls).
  *       Estado inicial: invisible (scale 0 + opacity 0)
- *       FASE 1 (scrolls 0 → 13 del propio timeline = absolutos 4 → 17):
- *         aparece de la nada, crece a tamaño similar al final de img1,
- *         se enfoca, opacidad sube a 1
+ *       FASE 1 (scrolls 0 → 13 del timeline = absolutos 4 → 17):
+ *         aparece de la nada, crece, se enfoca, opacidad sube a 1
  *       FASE 2 (scrolls 13 → 17 = absolutos 17 → 21, ULTIMOS 4 SCROLLS):
+ *         fade out + sigue agrandando
+ *
+ *   - IMAGEN 3 (izquierda abajo, top:75% left:13%):
+ *       Scroll range: 720 → 2610px (= scrolls 8 a 29; total 21 scrolls).
+ *       Empieza en el 4o scroll de img2.
+ *       Estado inicial: invisible (scale 0 + opacity 0)
+ *       FASE 1 (scrolls 0 → 17 del timeline = absolutos 8 → 25):
+ *         aparece de la nada, crece, se enfoca, opacidad sube a 1
+ *       FASE 2 (scrolls 17 → 21 = absolutos 25 → 29, ULTIMOS 4 SCROLLS):
  *         fade out + sigue agrandando
  *
  * REGLA: la fase de fade siempre dura los ULTIMOS 4 SCROLLS de cada
@@ -56,15 +64,22 @@ const TEST_IMAGE = "/images/bento/05-flatlay.png";
 // y se desaparece. Provisoria mientras probamos las animaciones.
 const TEST_IMAGE_2 = "/images/bento/06-convert.png";
 
+// Tercera imagen — lado izquierdo, debajo de la imagen 1. Misma dinamica
+// que la 2: aparece desde 0, crece, se enfoca, y se desvanece en los
+// ultimos 4 scrolls.
+const TEST_IMAGE_3 = "/images/bento/03-blob.png";
+
 export function ServiciosManifesto() {
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const image2Ref = useRef<HTMLImageElement>(null);
+  const image3Ref = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     const image = imageRef.current;
     const image2 = image2Ref.current;
+    const image3 = image3Ref.current;
     if (!section || !image) return;
 
     // ============================================================
@@ -178,6 +193,61 @@ export function ServiciosManifesto() {
       );
     }
 
+    // ============================================================
+    // IMAGEN 3 — ScrollTrigger independiente.
+    //   Start: scroll 8 (= 4o scroll de img2; 8 × 90 = 720px desde el top).
+    //   End:   scroll 29 (720 + 1890 = 2610px); duracion 21 scrolls.
+    // Misma dinamica que img2: invisible al inicio, crece + se enfoca,
+    // fade en los ULTIMOS 4 SCROLLS (scrolls 25 → 29).
+    // ============================================================
+    let tl3: gsap.core.Timeline | null = null;
+    if (image3) {
+      gsap.set(image3, {
+        xPercent: -50,
+        yPercent: -50,
+        scale: 0,
+        filter: "blur(14px)",
+        opacity: 0,
+      });
+
+      tl3 = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: "top top-=720", // scroll 8 × 90px = 720px
+          end: "+=1890",         // duracion 21 scrolls × 90px (termina en scroll 29)
+          scrub: 0.6,
+        },
+      });
+
+      // IMG3 FASE 1 (scrolls 0 → 17 de su timeline = absolutos 8 → 25):
+      // aparece de la nada, crece, se enfoca, opacidad sube a 1. 17 de
+      // los 21 scrolls.
+      tl3.to(
+        image3,
+        {
+          scale: 1.15,
+          filter: "blur(0px)",
+          opacity: 1,
+          duration: 17,
+          ease: "power2.inOut",
+        },
+        0
+      );
+
+      // IMG3 FASE 2 (scrolls 17 → 21 de su timeline = ULTIMOS 4 SCROLLS
+      // absolutos 25 → 29): fade out + crece un toque mas.
+      tl3.to(
+        image3,
+        {
+          scale: 1.25,
+          opacity: 0,
+          duration: 4,
+          ease: "power2.in",
+        },
+        17
+      );
+    }
+
     // Refresh tras montar para que ScrollTrigger calcule posiciones correctas
     const refreshIds = [
       window.setTimeout(() => ScrollTrigger.refresh(), 100),
@@ -190,6 +260,8 @@ export function ServiciosManifesto() {
       tl1.kill();
       tl2?.scrollTrigger?.kill();
       tl2?.kill();
+      tl3?.scrollTrigger?.kill();
+      tl3?.kill();
     };
   }, []);
 
@@ -201,13 +273,12 @@ export function ServiciosManifesto() {
       style={{
         backgroundColor: COLOR_BG,
         color: COLOR_FG,
-        // height = 100vh del sticky + 1890px de "scroll runway".
-        // 1890px = 21 scrolls × 90px (con Lenis wheelMultiplier:0.9 y
-        // 100px delta nativo de Windows). Es el scroll-21, donde la
-        // segunda imagen termina de desvanecerse. Img1 termina antes,
-        // en el scroll-16, pero el sticky tiene que aguantar hasta el
-        // final de img2.
-        height: "calc(100vh + 1890px)",
+        // height = 100vh del sticky + 2610px de "scroll runway".
+        // 2610px = 29 scrolls × 90px (Lenis wheelMultiplier:0.9, delta
+        // nativo Windows 100px). Scroll-29 es donde termina la imagen 3.
+        // Img1 acaba en scroll-16, img2 en scroll-21, img3 en scroll-29:
+        // el sticky tiene que aguantar hasta el final de la mas tardia.
+        height: "calc(100vh + 2610px)",
       }}
     >
       <div
@@ -252,6 +323,28 @@ export function ServiciosManifesto() {
             position: "absolute",
             top: "50%",
             left: "87%",
+            width: "18vw",
+            height: "24vw",
+            objectFit: "cover",
+            transformOrigin: "center center",
+            willChange: "transform, filter, opacity",
+            borderRadius: "6px",
+            pointerEvents: "none",
+            zIndex: 1,
+          }}
+        />
+
+        {/* Tercera imagen — lado izquierdo, debajo de la imagen 1.
+            Centro en (left: 13%, top: 75%): misma columna que img1 pero
+            mas abajo. Animacion en el useEffect (start scroll 8, fin 29). */}
+        <img
+          ref={image3Ref}
+          src={TEST_IMAGE_3}
+          alt=""
+          style={{
+            position: "absolute",
+            top: "75%",
+            left: "13%",
             width: "18vw",
             height: "24vw",
             objectFit: "cover",
