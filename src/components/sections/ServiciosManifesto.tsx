@@ -165,7 +165,12 @@ export function ServiciosManifesto() {
       style={{
         backgroundColor: COLOR_BG,
         color: COLOR_FG,
-        height: "200vh",
+        // height = 100vh del sticky + 1440px de "scroll runway" para que
+        // la animacion completa de la primera imagen dure ~16 scrolls de
+        // mouse wheel (con Lenis wheelMultiplier:0.9 y 100px delta nativo
+        // de Windows: 16 × 90px ≈ 1440px). Si en tu setup salen mas o
+        // menos scrolls, ajustar el 1440 hasta calibrar.
+        height: "calc(100vh + 1440px)",
       }}
     >
       <div
