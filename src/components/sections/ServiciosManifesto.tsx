@@ -18,17 +18,22 @@ gsap.registerPlugin(ScrollTrigger);
  *
  *   - IMAGEN 1 (izquierda, top:42% left:13%):
  *       Scroll range: 0px → 1440px del top de la sección (= scrolls 0 a 16).
- *       FASE 1 (0% → 70% del propio scroll): aparece chica + blureada +
- *         opacity 0.55, se acerca creciendo, se enfoca, opacidad sube a 1
- *       FASE 2 (70% → 100%): fade out + sigue agrandando hasta desaparecer
+ *       FASE 1 (scrolls 0 → 12): aparece chica + blureada + opacity 0.55,
+ *         se acerca creciendo, se enfoca, opacidad sube a 1
+ *       FASE 2 (scrolls 12 → 16, ULTIMOS 4 SCROLLS): fade out + agranda
  *
  *   - IMAGEN 2 (derecha, top:42% left:87% — espejo de la 1):
  *       Scroll range: 360px → 1890px del top (= scrolls 4 a 21; total 17 scrolls).
  *       Estado inicial: invisible (scale 0 + opacity 0)
- *       FASE 1 (0% → 70% del propio scroll = scrolls 4 a 16): aparece de
- *         la nada, crece a tamaño similar al final de img1, se enfoca,
- *         opacidad sube a 1
- *       FASE 2 (70% → 100% = scrolls 16 a 21): fade out + sigue agrandando
+ *       FASE 1 (scrolls 0 → 13 del propio timeline = absolutos 4 → 17):
+ *         aparece de la nada, crece a tamaño similar al final de img1,
+ *         se enfoca, opacidad sube a 1
+ *       FASE 2 (scrolls 13 → 17 = absolutos 17 → 21, ULTIMOS 4 SCROLLS):
+ *         fade out + sigue agrandando
+ *
+ * REGLA: la fase de fade siempre dura los ULTIMOS 4 SCROLLS de cada
+ * imagen. Si una imagen futura tiene mas o menos scrolls totales, su
+ * fade sigue siendo 4 scrolls (cambia solo la duracion del grow).
  *
  * Próximas imágenes se siguen agregando aquí, una por una.
  */
@@ -85,29 +90,34 @@ export function ServiciosManifesto() {
       },
     });
 
-    // FASE 1 (0% → 70% del scroll de img1): se acerca, crece sutilmente, se enfoca
+    // FASE 1 (scrolls 0 → 12 = primeros 12 scrolls de img1): se acerca,
+    // crece sutilmente, se enfoca.
+    // NOTA sobre unidades: con scrub, la "duracion" del tween es relativa
+    // al total del timeline. Usamos numeros enteros que coinciden con la
+    // cuenta de scrolls (1 unidad = 1 scroll de mouse wheel ≈ 90px).
     tl1.to(
       image,
       {
         scale: 1.05,
         filter: "blur(0px)",
         opacity: 1,
-        duration: 0.7,
+        duration: 12,
         ease: "power2.inOut",
       },
       0
     );
 
-    // FASE 2 (70% → 100% del scroll de img1): un toque más grande + fade out
+    // FASE 2 (scrolls 12 → 16 = ULTIMOS 4 SCROLLS): se agranda un toque
+    // mas y se desvanece.
     tl1.to(
       image,
       {
         scale: 1.15,
         opacity: 0,
-        duration: 0.3,
+        duration: 4,
         ease: "power2.in",
       },
-      0.7
+      12
     );
 
     // ============================================================
@@ -139,32 +149,32 @@ export function ServiciosManifesto() {
         },
       });
 
-      // IMG2 FASE 1 (0% → 70% de su scroll ≈ scrolls 4 a 16): aparece de la
-      // nada, crece a tamano similar al final de img1, se enfoca, opacidad
-      // sube a 1. 12 de los 17 scrolls = ~70%.
+      // IMG2 FASE 1 (scrolls 0 → 13 de su timeline = absolutos 4 → 17):
+      // aparece de la nada, crece a tamano similar al final de img1,
+      // se enfoca, opacidad sube a 1. 13 scrolls de growth.
       tl2.to(
         image2,
         {
           scale: 1.15,
           filter: "blur(0px)",
           opacity: 1,
-          duration: 0.7,
+          duration: 13,
           ease: "power2.inOut",
         },
         0
       );
 
-      // IMG2 FASE 2 (70% → 100% ≈ scrolls 16 a 21): fade out + crece un toque mas.
-      // 5 de los 17 scrolls = ~30%.
+      // IMG2 FASE 2 (scrolls 13 → 17 de su timeline = ULTIMOS 4 SCROLLS
+      // absolutos 17 → 21): fade out + crece un toque mas.
       tl2.to(
         image2,
         {
           scale: 1.25,
           opacity: 0,
-          duration: 0.3,
+          duration: 4,
           ease: "power2.in",
         },
-        0.7
+        13
       );
     }
 
