@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { TransitionLink } from "@/components/effects/TransitionLink";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,28 +28,38 @@ type Service = {
   word: string;
   tag: string;
   image: string;
+  href: string;
+  color: string; // color de fondo de la página destino (para el wipe)
 };
 
 const SERVICES: Service[] = [
   {
     word: "Branding",
     tag: "IDENTITY",
-    image: "/images/bento/02-typography.png",
+    image: "/images/bento/02-typography.webp",
+    href: "/servicios/branding",
+    color: "#0A0A0A",
   },
   {
     word: "Web Design",
     tag: "DEVELOPMENT",
-    image: "/images/bento/06-convert.png",
+    image: "/images/bento/06-convert.webp",
+    href: "/servicios/web-design",
+    color: "#0A0A0A",
   },
   {
     word: "ERPs",
     tag: "SYSTEMS",
-    image: "/images/bento/05-flatlay.png",
+    image: "/images/bento/05-flatlay.webp",
+    href: "/servicios/erps",
+    color: "#0A0A0A",
   },
   {
     word: "Automatizaciones",
     tag: "WORKFLOWS",
-    image: "/images/bento/07-wall.png",
+    image: "/images/bento/07-wall.webp",
+    href: "/servicios/automatizaciones",
+    color: "#0A0A0A",
   },
 ];
 
@@ -172,10 +183,7 @@ export function ServiciosList() {
               }}
             />
 
-            {/* Mascara overflow:hidden alrededor de la palabra solamente.
-                El masked-lines reveal mueve .sl-word con yPercent y este
-                wrapper lo clippea. Position:relative + zIndex 1 garantiza
-                que la palabra quede SIEMPRE encima de la imagen. */}
+            {/* Mascara overflow:hidden alrededor de la palabra solamente. */}
             <span
               style={{
                 position: "relative",
@@ -185,27 +193,33 @@ export function ServiciosList() {
                 lineHeight: 0.95,
               }}
             >
-              <span
-                className="sl-word"
-                style={{
-                  display: "inline-block",
-                  fontFamily:
-                    'var(--font-anton), "Anton", "Impact", "Arial Narrow", sans-serif',
-                  fontSize: "clamp(64px, 11vw, 220px)",
-                  lineHeight: 0.95,
-                  fontWeight: 400,
-                  letterSpacing: "-0.01em",
-                  textTransform: "uppercase",
-                  color:
-                    hovered === null || hovered === i
-                      ? COLOR_TEXT_ACTIVE
-                      : COLOR_TEXT_DIM,
-                  transition: "color 0.25s ease",
-                  whiteSpace: "nowrap",
-                }}
+              <TransitionLink
+                href={s.href}
+                color={s.color}
+                style={{ textDecoration: "none", cursor: "pointer" }}
               >
-                {s.word}
-              </span>
+                <span
+                  className="sl-word"
+                  style={{
+                    display: "inline-block",
+                    fontFamily:
+                      'var(--font-anton), "Anton", "Impact", "Arial Narrow", sans-serif',
+                    fontSize: "clamp(64px, 11vw, 220px)",
+                    lineHeight: 0.95,
+                    fontWeight: 400,
+                    letterSpacing: "-0.01em",
+                    textTransform: "uppercase",
+                    color:
+                      hovered === null || hovered === i
+                        ? COLOR_TEXT_ACTIVE
+                        : COLOR_TEXT_DIM,
+                    transition: "color 0.25s ease",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {s.word}
+                </span>
+              </TransitionLink>
             </span>
 
             {/* Tag a la derecha — solo visible cuando este item está hovereado */}

@@ -25,14 +25,14 @@ type BentoItem =
  * - Slot 8 (bottom-center, 1 fila): silueta atardecer
  */
 const BENTO_ITEMS: BentoItem[] = [
-  { type: "image", src: "/images/bento/07-wall.png", alt: "Sombra de ventana sobre pared", objectPosition: "center 80%" }, // slot 1 — pared (subido para ver la planta)
-  { type: "image", src: "/images/bento/02-typography.png", alt: "Macro de tipografía editorial" },  // slot 2 — tipografía macro
+  { type: "image", src: "/images/bento/07-wall.webp", alt: "Sombra de ventana sobre pared", objectPosition: "center 80%" }, // slot 1 — pared (subido para ver la planta)
+  { type: "image", src: "/images/bento/02-typography.webp", alt: "Macro de tipografía editorial" },  // slot 2 — tipografía macro
   { type: "frames", alt: "MacBook abriéndose" },                                                       // slot 3 — laptop (FIJO)
-  { type: "image", src: "/images/bento/08-silhouette.png", alt: "Silueta trabajando al atardecer" },// slot 4 — silueta atardecer
-  { type: "image", src: "/images/bento/03-blob.png", alt: "Render 3D abstracto en crema" },         // slot 5 — Blob 3D
-  { type: "image", src: "/images/bento/06-convert.png", alt: "Monitor con designed to convert" },   // slot 6 — designed to convert
-  { type: "image", src: "/images/bento/05-flatlay.png", alt: "Workspace con wireframes y café" },   // slot 7 — flatlay wireframes
-  { type: "image", src: "/images/bento/01-typing.png", alt: "Manos escribiendo código" },           // slot 8 — manos tecleando
+  { type: "image", src: "/images/bento/08-silhouette.webp", alt: "Silueta trabajando al atardecer" },// slot 4 — silueta atardecer
+  { type: "image", src: "/images/bento/03-blob.webp", alt: "Render 3D abstracto en crema" },         // slot 5 — Blob 3D
+  { type: "image", src: "/images/bento/06-convert.webp", alt: "Monitor con designed to convert" },   // slot 6 — designed to convert
+  { type: "image", src: "/images/bento/05-flatlay.webp", alt: "Workspace con wireframes y café" },   // slot 7 — flatlay wireframes
+  { type: "image", src: "/images/bento/01-typing.webp", alt: "Manos escribiendo código" },           // slot 8 — manos tecleando
 ];
 
 // Frame sequence de la laptop generado con ffmpeg a partir del mp4.
@@ -196,7 +196,7 @@ export function BentoGallery() {
     <section
       ref={sectionRef}
       data-nav-theme="dark"
-      className="bento-section relative w-full bg-black"
+      className="bento-section relative w-full bg-white"
     >
       <div className="gallery-wrap">
         <div ref={galleryRef} className="gallery gallery--bento">

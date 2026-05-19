@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, IBM_Plex_Mono, DM_Sans, Anton } from "next/font/google";
+import { Plus_Jakarta_Sans, IBM_Plex_Mono, DM_Sans, Anton, Barlow_Semi_Condensed, Instrument_Serif } from "next/font/google";
 import { SmoothScrollProvider } from "@/components/layout/SmoothScrollProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import { CustomCursor } from "@/components/effects/CustomCursor";
 import { PageTransition } from "@/components/effects/PageTransition";
+import { TransitionProvider } from "@/providers/TransitionProvider";
+import { TransitionOverlay } from "@/components/effects/TransitionOverlay";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -34,6 +36,24 @@ const anton = Anton({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--font-anton",
+  display: "swap",
+});
+
+// Barlow Semi Condensed — semi condensado heavy, alternativa a Miedinger Bold
+const barlowSemiCondensed = Barlow_Semi_Condensed({
+  subsets: ["latin"],
+  weight: ["700", "800"],
+  variable: "--font-barlow-semi-condensed",
+  display: "swap",
+});
+
+// Instrument Serif — display serif italic con alto contraste, estilo editorial.
+// Usado en el footer gigante de /servicios (réplica de detroit.paris/insights).
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: ["400"],
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
   display: "swap",
 });
 
@@ -78,13 +98,16 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${plusJakartaSans.variable} ${ibmPlexMono.variable} ${dmSans.variable} ${anton.variable}`}
+      className={`${plusJakartaSans.variable} ${ibmPlexMono.variable} ${dmSans.variable} ${anton.variable} ${barlowSemiCondensed.variable} ${instrumentSerif.variable}`}
     >
       <body>
-        <Navbar />
-        <SmoothScrollProvider>{children}</SmoothScrollProvider>
-        <CustomCursor />
-        <PageTransition />
+        <TransitionProvider>
+          <Navbar />
+          <SmoothScrollProvider>{children}</SmoothScrollProvider>
+          <CustomCursor />
+          <PageTransition />
+          <TransitionOverlay />
+        </TransitionProvider>
       </body>
     </html>
   );

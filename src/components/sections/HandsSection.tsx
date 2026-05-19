@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 const TOTAL_FRAMES = 112;
 
 function frameUrl(index: number) {
-  return `/frames/frame_${String(index + 1).padStart(4, "0")}.png`;
+  return `/frames/frame_${String(index + 1).padStart(4, "0")}.webp`;
 }
 
 export function HandsSection() {
@@ -95,7 +95,7 @@ export function HandsSection() {
     let isAutoScrolling = false;
     let lastUserScrollTime = 0;
     const USER_PAUSE_MS = 700;     // ms de pausa después del último input antes de retomar
-    const CHASE_K = 0.0005;        // constante exponencial (~10s para llegar al 99%)
+    const SCROLL_SPEED = 0.85;     // px/ms = 850px/s — velocidad lineal constante
 
     const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
@@ -176,9 +176,9 @@ export function HandsSection() {
         }
 
         if (!userActive) {
-          // Soft chase exponencial hacia el target
-          const factor = 1 - Math.exp(-CHASE_K * dt);
-          const newY = currentY + remaining * factor;
+          // Velocidad lineal constante: misma velocidad desde el inicio hasta el final
+          const step = Math.min(Math.abs(remaining), SCROLL_SPEED * dt);
+          const newY = currentY + Math.sign(remaining) * step;
           window.scrollTo(0, newY);
         }
         // Si userActive → no scrolleamos, dejamos al usuario en control

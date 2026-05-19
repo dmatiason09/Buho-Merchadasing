@@ -1,10 +1,14 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SmearText } from "@/components/effects/SmearText";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Navbar adaptive: el logo y los links cambian de color según
@@ -18,12 +22,14 @@ import { SmearText } from "@/components/effects/SmearText";
 const NAV_LINKS = [
   { href: "/portafolio", label: "Portafolio", transitionText: "PORTAFOLIO" },
   { href: "/servicios",  label: "Servicios",  transitionText: "SERVICIOS" },
-  { href: "/contacto",   label: "Contacto",   transitionText: "CONTACTO" },
+  { href: "/nosotros",   label: "Nosotros",   transitionText: "NOSOTROS"   },
+  { href: "/contacto",   label: "Contacto",   transitionText: "CONTACTO"   },
 ];
 
 export function Navbar() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const pathname = usePathname();
+  const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const NAVBAR_Y = 40;
@@ -51,41 +57,70 @@ export function Navbar() {
     };
   }, []);
 
+  // Hide on scroll down, show on scroll up
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+
+    const showAnim = gsap.from(nav, {
+      yPercent: -100,
+      paused: true,
+      duration: 0.3,
+      ease: "power2.inOut",
+    }).progress(1);
+
+    const st = ScrollTrigger.create({
+      start: "top top",
+      end: "max",
+      onUpdate: (self) => {
+        if (self.direction === -1) {
+          showAnim.play();
+        } else {
+          // Solo ocultar si ya scrolleamos un poco (no en el top)
+          if (window.scrollY > 100) showAnim.reverse();
+        }
+      },
+    });
+
+    return () => {
+      st.kill();
+      showAnim.kill();
+    };
+  }, []);
+
   const isDark = theme === "dark";
+  const isHome = pathname === "/";
   // Inactivos: gris medio sobre el tema; activo: contrast pleno (estilo douglus)
   const inactiveColor = isDark ? "text-white/50" : "text-black/40";
   const activeColor = isDark ? "text-white" : "text-black";
-  const logoSrc = isDark ? "/images/logo-white.png" : "/images/logo-black.png";
-
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100000] flex items-center justify-between px-8 py-5">
-      {/* Logo a la izquierda → vuelve al inicio */}
+    <nav ref={navRef} className="fixed top-0 left-0 right-0 z-[100000] flex items-center justify-between px-12 py-6">
+
+      {/* Logo — solo visible fuera del home */}
       <Link
         href="/"
-        aria-label="Aymacode — Ir al inicio"
+        aria-label="Inicio"
         data-transition
         data-transition-text="HOME"
-        data-cursor-style="link"
-        className="block transition-opacity hover:opacity-80"
+        className={`transition-opacity duration-300 ${isHome ? "pointer-events-none opacity-0" : "opacity-100"}`}
+        tabIndex={isHome ? -1 : 0}
       >
-        <Image
-          key={logoSrc}
-          src={logoSrc}
-          alt="Aymacode logo"
-          width={48}
-          height={48}
-          className="h-12 w-12 object-contain"
-          priority
-        />
+        <div style={{ position: "relative", width: "clamp(48px, 5vw, 72px)", height: "clamp(48px, 5vw, 72px)" }}>
+          <Image
+            src={isDark ? "/images/logo-white.webp" : "/images/logo-black.png"}
+            alt="Aymacode"
+            fill
+            className="object-contain"
+          />
+        </div>
       </Link>
 
-      {/* Navegación al centro: Portafolio,Nosotros,Contacto — compact estilo douglus */}
       <ul
         className="flex items-center"
         style={{
           fontFamily: 'var(--font-plus-jakarta), "Plus Jakarta Sans", sans-serif',
           fontWeight: 700,
-          fontSize: "clamp(18px, 1.4vw, 24px)",
+          fontSize: "clamp(22px, 2vw, 32px)",
           letterSpacing: "-0.01em",
         }}
       >
@@ -111,9 +146,6 @@ export function Navbar() {
           );
         })}
       </ul>
-
-      {/* Spacer derecho para mantener el flex centrado visualmente */}
-      <div className="h-12 w-12" aria-hidden="true" />
     </nav>
   );
 }

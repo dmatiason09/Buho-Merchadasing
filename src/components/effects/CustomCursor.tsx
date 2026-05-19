@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 /**
  * CustomCursor — estilo douglus.site
@@ -20,7 +21,14 @@ export function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null);
   const circleRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
+  const handRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Esperar a tener document para crear el portal (evita errores en SSR)
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     // Skip en touch (no hay cursor)
@@ -30,7 +38,8 @@ export function CustomCursor() {
     const dot = dotRef.current;
     const circle = circleRef.current;
     const label = labelRef.current;
-    if (!dot || !circle || !label) return;
+    const hand = handRef.current;
+    if (!dot || !circle || !label || !hand) return;
 
     // Posición target (mouse real) y current (interpolada para el circle)
     let targetX = window.innerWidth / 2;
@@ -43,13 +52,17 @@ export function CustomCursor() {
     const onMouseMove = (e: MouseEvent) => {
       targetX = e.clientX;
       targetY = e.clientY;
-      // El dot sigue exacto sin lerp
+      // El dot y la mano siguen exacto sin lerp
       dot.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) translate(-50%, -50%)`;
+      // La mano se posiciona con la PUNTA DEL DEDO en la coord del mouse:
+      // dedo está en ~50% del ancho y ~5% del alto del PNG → translate(-50%, -5%)
+      hand.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) translate(-50%, -5%)`;
     };
 
     const onMouseLeave = () => {
       circle.style.opacity = "0";
       dot.style.opacity = "0";
+      hand.style.opacity = "0";
     };
     const onMouseEnter = () => {
       circle.style.opacity = "1";
@@ -63,6 +76,10 @@ export function CustomCursor() {
         circle.className = "cursor-circle";
         label.textContent = "";
         targetScale = 1;
+        // Sin hover → ocultar mano, mostrar círculo
+        hand.style.opacity = "0";
+        circle.style.opacity = "1";
+        dot.style.opacity = "1";
         return;
       }
       const el = target as HTMLElement;
@@ -70,7 +87,12 @@ export function CustomCursor() {
       const text = el.dataset.cursorText;
       const scale = el.dataset.cursorScale;
 
-      // Resetear y aplicar
+      // Sobre elemento clickeable → mostrar mano y ocultar círculo+dot
+      hand.style.opacity = "1";
+      circle.style.opacity = "0";
+      dot.style.opacity = "0";
+
+      // Resetear y aplicar (mantengo la lógica del círculo por si se quita la mano)
       circle.className = "cursor-circle cursor-circle--active";
       if (style === "link" || el.tagName === "A") circle.classList.add("cursor-circle--hover-link");
       else if (style === "cta" || el.tagName === "BUTTON") circle.classList.add("cursor-circle--hover-cta");
@@ -114,14 +136,20 @@ export function CustomCursor() {
       document.removeEventListener("mouseenter", onMouseEnter);
       document.removeEventListener("pointerover", onPointerOver);
     };
-  }, []);
+  }, [mounted]);
 
-  return (
+  // Renderizamos vía Portal directo a document.body → escapamos cualquier
+  // stacking context creado por transforms/filters en parents.
+  if (!mounted) return null;
+
+  return createPortal(
     <div aria-hidden="true" className="custom-cursor">
       <div ref={dotRef} className="cursor-dot" />
       <div ref={circleRef} className="cursor-circle">
         <span ref={labelRef} className="cursor-circle__label" />
       </div>
-    </div>
+      <div ref={handRef} className="cursor-hand" />
+    </div>,
+    document.body,
   );
 }

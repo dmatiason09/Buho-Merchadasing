@@ -1,5 +1,108 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Universo";
+  src: url("/fonts/Fontspring-DEMO-universo-black.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Universo";
+  src: url("/fonts/Fontspring-DEMO-universo-bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Universo";
+  src: url("/fonts/Fontspring-DEMO-universo-regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Universo";
+  src: url("/fonts/Fontspring-DEMO-universo-light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Universo";
+  src: url("/fonts/Fontspring-DEMO-universo-thin.otf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Europa Grotesk";
+  src: url("/fonts/europa-grotesk-medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Britanica";
+  src: url("/fonts/Britanica-Black Regular.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Heatwood";
+  src: url("/fonts/Heatwood.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Sangira";
+  src: url("/fonts/Sangira.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ARP Display";
+  src: url("/fonts/ARPDisplay-150.woff2") format("woff2"),
+       url("/fonts/ARPDisplay-150.woff") format("woff"),
+       url("/fonts/ARPDisplay-150.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Benzin";
+  src: url("/fonts/benzin-semibold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face { font-family: "Jumper"; src: url("/fonts/JumperPERSONALUSEONLY-Thin.ttf") format("truetype"); font-weight: 100; font-style: normal; font-display: swap; }
+@font-face { font-family: "Jumper"; src: url("/fonts/JumperPERSONALUSEONLY-ThinItalic.ttf") format("truetype"); font-weight: 100; font-style: italic; font-display: swap; }
+@font-face { font-family: "Jumper"; src: url("/fonts/JumperPERSONALUSEONLY-Light.ttf") format("truetype"); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: "Jumper"; src: url("/fonts/JumperPERSONALUSEONLY-LightItalic.ttf") format("truetype"); font-weight: 300; font-style: italic; font-display: swap; }
+@font-face { font-family: "Jumper"; src: url("/fonts/JumperPERSONALUSEONLY-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Jumper"; src: url("/fonts/JumperPERSONALUSEONLY-RegularItalic.ttf") format("truetype"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Jumper"; src: url("/fonts/JumperPERSONALUSEONLY-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Jumper"; src: url("/fonts/JumperPERSONALUSEONLY-BoldItalic.ttf") format("truetype"); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: "Jumper"; src: url("/fonts/JumperPERSONALUSEONLY-Extra-Bold.ttf") format("truetype"); font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Jumper"; src: url("/fonts/JumperPERSONALUSEONLY-Extra-BoldItalic.ttf") format("truetype"); font-weight: 800; font-style: italic; font-display: swap; }
+@font-face { font-family: "Jumper"; src: url("/fonts/JumperPERSONALUSEONLY-Black.ttf") format("truetype"); font-weight: 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Jumper"; src: url("/fonts/JumperPERSONALUSEONLY-BlackItalic.ttf") format("truetype"); font-weight: 900; font-style: italic; font-display: swap; }
+
 /* ============================================================
    AYMACODE - Estilos globales
    Migrados desde styles.css original, conservando la estética
@@ -15,6 +118,12 @@
 
 html {
   /* scroll-behavior: smooth — removido, conflicta con GSAP ScrollTrigger */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Chrome / Safari */
 }
 
 body {
@@ -142,7 +251,8 @@ nextjs-portal {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 999999;
+  /* Máximo z-index posible — el cursor SIEMPRE encima de todo */
+  z-index: 2147483647;
 }
 
 @media (hover: none), (pointer: coarse) {
@@ -223,9 +333,32 @@ nextjs-portal {
   color: #151613;
 }
 
-/* Esconder cursor nativo cuando custom está activo (solo desktop) */
+/* Mano cartoon — aparece sobre elementos clickeables (botones, links, etc.) */
+.cursor-hand {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 1000002; /* arriba del dot y del circle */
+  background-image: url("/cursors/hand.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  will-change: transform, opacity;
+}
+
+/* Esconder cursor nativo cuando custom está activo (solo desktop).
+   `*, *::before, *::after` → fuerza none en ABSOLUTAMENTE TODO elemento,
+   incluyendo pseudo-elementos. Sin esto, elementos con `cursor: pointer`
+   muestran el puntero del SO sobre tu cursor custom. */
 @media (hover: hover) and (pointer: fine) {
-  html, body, a, button {
+  *,
+  *::before,
+  *::after {
     cursor: none !important;
   }
 }
@@ -340,7 +473,7 @@ nextjs-portal {
   flex: none;
   overflow: hidden;
   border-radius: 12px;
-  background-color: #1a1a1a;
+  background-color: #ffffff;
 }
 
 .gallery__item img,
@@ -374,4 +507,4 @@ nextjs-portal {
 .gallery--bento .gallery__item:nth-child(5) { grid-area: 3 / 1 / 3 / 2; }
 .gallery--bento .gallery__item:nth-child(6) { grid-area: 3 / 3 / 5 / 4; }
 .gallery--bento .gallery__item:nth-child(7) { grid-area: 4 / 1 / 5 / 2; }
-.gallery--bento .gallery__item:nth-child(8) { grid-area: 4 / 2 / 5 / 3; }
+.gallery--bento .gallery__item:nth-child(8) { grid-area: 4 / 2 / 5 / 3; background-color: #ffffff; }
