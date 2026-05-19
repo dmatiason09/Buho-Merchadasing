@@ -395,7 +395,6 @@ export function AboutSection() {
                 textTransform: "uppercase",
                 textDecoration: "none",
                 border: "1.5px solid #1a1a1a",
-              borderRadius: "8px",
                 borderRadius: "8px",
               }}
             >
