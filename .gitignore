@@ -43,3 +43,23 @@ next-env.d.ts
 .vscode/
 .idea/
 *.swp
+
+# Reference/learning material (CodePen pens, GSAP demos) — not part of build
+/_references/
+/_source-media/
+/overwrite-dynamic-tweens/
+/slides-pinningoverscroll-solution/
+
+# Source media / leftover downloads in repo root (originals, raw uploads, dupes of /public/fonts)
+/*.jpg
+/*.jpeg
+/*.png
+/*.mp4
+/*.webp
+/ARP-*.*
+/ARPDisplay-*.*
+/benzin-*.*
+/Sangira.*
+
+# Audit "to-review" trash bucket (Fase 3)
+/_TRASH_REVIEW/
