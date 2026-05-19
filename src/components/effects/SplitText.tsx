@@ -49,9 +49,15 @@ const SplitText: React.FC<SplitTextProps> = ({
   useEffect(() => {
     if (document.fonts.status === 'loaded') {
       setFontsLoaded(true);
-    } else {
-      document.fonts.ready.then(() => setFontsLoaded(true));
+      return;
     }
+    // Guard async resolution: si el componente se desmonta antes de que
+    // las fuentes terminen de cargar, evitar `setState` sobre unmounted.
+    let cancelled = false;
+    document.fonts.ready.then(() => {
+      if (!cancelled) setFontsLoaded(true);
+    });
+    return () => { cancelled = true; };
   }, []);
 
   useGSAP(

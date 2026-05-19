@@ -582,8 +582,15 @@ export function LoadingScreen() {
     const particleCount = Math.max(3500, Math.floor((cols * rows) / 5));
     particlesRef.current = initParticles(particleCount, cols, rows);
 
+    // Flag para abortar callbacks asíncronos si el componente se desmonta
+    // antes de que las fuentes terminen de cargar. Sin esto, las dos
+    // `document.fonts.ready.then(...)` de abajo escribirían en refs de un
+    // componente ya desmontado (warning en dev, ruido en prod).
+    let cancelled = false;
+
     // Pre-computar bias grid del hero (aymacode + elipse + scroll)
     document.fonts.ready.then(() => {
+      if (cancelled) return;
       heroBiasRef.current = buildHeroBiasGrid(cols, rows);
       // Jitter por columna (0-150ms) para que las filas no caigan perfectas
       const jitters: number[] = [];
@@ -596,6 +603,7 @@ export function LoadingScreen() {
     // Pre-computar targets cuando la fuente esté disponible en el canvas.
     // document.fonts.ready garantiza que DM Sans esté cargada antes de dibujar.
     document.fonts.ready.then(() => {
+      if (cancelled) return;
       letterTargetsRef.current = buildLetterTargetsFromCanvas(
         WORD, cols / 2, rows / 2, cols, rows
       );
@@ -961,6 +969,7 @@ export function LoadingScreen() {
     rafRef.current = requestAnimationFrame(tick);
 
     return () => {
+      cancelled = true;
       cancelAnimationFrame(rafRef.current);
     };
   }, [hidden]);
