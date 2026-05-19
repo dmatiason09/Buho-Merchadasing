@@ -48,14 +48,24 @@ export function PageTransition() {
   const pathname = usePathname();
   const [destText, setDestText] = useState("");
   const isAnimatingRef = useRef(false);
+  // Timeline activo: lo guardamos para poder matarlo si entra un click nuevo
+  // antes de que termine. Sin esto, la timeline vieja seguiría ejecutándose
+  // y haría router.push() al destino antiguo, sobrescribiendo al nuevo.
+  const activeTimelineRef = useRef<gsap.core.Timeline | null>(null);
 
   /** Dispara la animación cortina hacia una URL */
   const navigate = useCallback(
     (href: string, text?: string) => {
-      // Fallback: si una animación previa quedó colgada (flag stuck en true),
-      // navegamos directo sin animación en vez de "comernos" el click.
-      // Esto previene el bug donde el usuario quedaba atrapado sin poder navegar.
+      // Click rápido durante una animación previa: matamos la animación
+      // vieja (eso dispara onInterrupt → libera el flag) y navegamos directo
+      // al nuevo destino sin animación. Esto previene 2 bugs:
+      //   1. Clicks "comidos" silenciosamente (flag stuck en true).
+      //   2. Timeline vieja haciendo router.push() al destino viejo después
+      //      de que el usuario ya pidió otro destino.
       if (isAnimatingRef.current) {
+        activeTimelineRef.current?.kill();
+        activeTimelineRef.current = null;
+        isAnimatingRef.current = false;
         router.push(href);
         return;
       }
@@ -96,15 +106,18 @@ export function PageTransition() {
       const tl = gsap.timeline({
         onComplete: () => {
           clearTimeout(safetyTimeout);
+          activeTimelineRef.current = null;
           isAnimatingRef.current = false;
         },
         onInterrupt: () => {
           // Si la timeline es interrumpida (e.g. otro tween la kill),
           // también debemos liberar el flag.
           clearTimeout(safetyTimeout);
+          activeTimelineRef.current = null;
           isAnimatingRef.current = false;
         },
       });
+      activeTimelineRef.current = tl;
 
       // 1. Sube la cortina (curva orgánica de abajo a cubriendo)
       //    power4.inOut + duración mayor = sensación SUPER smooth
