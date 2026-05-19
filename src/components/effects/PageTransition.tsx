@@ -52,7 +52,13 @@ export function PageTransition() {
   /** Dispara la animación cortina hacia una URL */
   const navigate = useCallback(
     (href: string, text?: string) => {
-      if (isAnimatingRef.current) return;
+      // Fallback: si una animación previa quedó colgada (flag stuck en true),
+      // navegamos directo sin animación en vez de "comernos" el click.
+      // Esto previene el bug donde el usuario quedaba atrapado sin poder navegar.
+      if (isAnimatingRef.current) {
+        router.push(href);
+        return;
+      }
       isAnimatingRef.current = true;
 
       const displayText = text || hrefToText(href);
@@ -67,15 +73,35 @@ export function PageTransition() {
       const path = pathRef.current;
       const stage = stageRef.current;
       const rule = ruleRef.current;
-      if (!path || !stage) return;
+      if (!path || !stage) {
+        // Refs no listos: liberar flag y navegar directo, no dejar
+        // el flag colgado bloqueando futuras navegaciones.
+        isAnimatingRef.current = false;
+        router.push(href);
+        return;
+      }
 
       // Reset
       path.setAttribute("d", PATH_INITIAL);
       gsap.set(stage, { opacity: 0 });
       if (rule) gsap.set(rule, { scaleX: 0, transformOrigin: "left center" });
 
+      // Safety timeout: si la timeline falla o queda colgada por cualquier
+      // motivo (navegación externa, error de GSAP, etc.), liberamos el flag
+      // después de 6s (la animación dura ~4.1s, así que 6s es margen seguro).
+      const safetyTimeout = setTimeout(() => {
+        isAnimatingRef.current = false;
+      }, 6000);
+
       const tl = gsap.timeline({
         onComplete: () => {
+          clearTimeout(safetyTimeout);
+          isAnimatingRef.current = false;
+        },
+        onInterrupt: () => {
+          // Si la timeline es interrumpida (e.g. otro tween la kill),
+          // también debemos liberar el flag.
+          clearTimeout(safetyTimeout);
           isAnimatingRef.current = false;
         },
       });
