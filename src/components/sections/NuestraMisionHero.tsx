@@ -65,13 +65,26 @@ export function NuestraMisionHero() {
       style={{
         position: "relative",
         width: "100%",
-        height: "100vh",
+        // Sección de 150vh — el hijo sticky de 100vh queda pineado para los
+        // primeros 50vh extra de scroll. Eso da tiempo de leer el bloque de
+        // misión sin que el slide cambie.
+        height: "150vh",
         backgroundColor: "#F5F1E8",
-        overflow: "hidden",
         // Overlap para no dejar una línea sub-pixel con la sección anterior
         marginTop: "-1px",
       }}
     >
+      {/* Wrapper sticky: mantiene el contenido visible en el viewport mientras
+          el usuario scrollea a través del espacio extra de la sección. */}
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          width: "100%",
+          height: "100vh",
+          overflow: "hidden",
+        }}
+      >
       {/* Bloque de misión, alineado arriba de las letras "ON" de MISION */}
       <div
         style={{
@@ -176,6 +189,7 @@ export function NuestraMisionHero() {
           </span>
         ))}
       </h1>
+      </div>
     </section>
   );
 }

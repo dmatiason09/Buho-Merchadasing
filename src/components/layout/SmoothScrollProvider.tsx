@@ -57,9 +57,25 @@ export function SmoothScrollProvider({
 
     rafId = requestAnimationFrame(raf);
 
+    // Re-calcular posiciones de ScrollTrigger una vez que TODAS las imágenes
+    // y fuentes terminen de cargar. Sin esto, los pin/scrub que se inicializan
+    // antes de que las imágenes carguen (e.g. QuienesSomos en /nosotros) quedan
+    // con posiciones obsoletas → al primer scroll el browser detecta el desfase
+    // y "salta" varias secciones a la vez. Esto pasa especialmente cuando la
+    // página se carga DETRÁS de la cortina de PageTransition (no hay urgencia
+    // de cargar imágenes hasta que la cortina sale).
+    const refreshTriggers = () => ScrollTrigger.refresh();
+    if (document.readyState === "complete") {
+      // La página YA terminó de cargar (navegación SPA tardía) → refresh al next frame
+      requestAnimationFrame(refreshTriggers);
+    } else {
+      window.addEventListener("load", refreshTriggers, { once: true });
+    }
+
     return () => {
       cancelAnimationFrame(rafId);
       lenis.destroy();
+      window.removeEventListener("load", refreshTriggers);
     };
   }, []);
 

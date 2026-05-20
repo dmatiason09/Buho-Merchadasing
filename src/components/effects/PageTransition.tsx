@@ -148,10 +148,25 @@ export function PageTransition() {
       // 3. Pausa visible mientras se ve el texto destino
       tl.to({}, { duration: 0.55 });
 
-      // 4. Navegar (cambio de página detrás de la cortina)
+      // 4. Navegar (cambio de página detrás de la cortina).
+      // Disparamos router.push DOS veces: una vez aquí (timeline-bound, en el
+      // momento óptimo visual) y otra vez como failsafe con setTimeout. Esto
+      // cubre el bug donde el callback del timeline a veces no se ejecuta de
+      // forma confiable cuando hay otras animaciones GSAP/React en paralelo
+      // (síntoma: la URL no cambiaba, click en logo no llevaba a home).
       tl.add(() => {
         router.push(href);
       });
+      // Failsafe redundante: si por algún motivo el callback del timeline no
+      // dispara o no completa la navegación, este timeout fuera de GSAP
+      // garantiza que la URL cambie. El timing coincide con el momento ideal
+      // del timeline (~1.95s después de empezar) — si la navegación ya
+      // ocurrió, llamar router.push con la misma href es un noop.
+      setTimeout(() => {
+        if (window.location.pathname !== href) {
+          router.push(href);
+        }
+      }, 1950);
 
       // 5. Sale el texto (slide up + fade) y la línea se retrae hacia la derecha
       tl.to(wordsRef.current, {
@@ -198,8 +213,12 @@ export function PageTransition() {
       const href = target.getAttribute("href");
       if (!href || href.startsWith("http") || href.startsWith("#") || href.startsWith("mailto:") || href.startsWith("tel:"))
         return;
-      // Si es el mismo path, ignorar
-      if (href === pathname) {
+      // Si es el mismo path, ignorar. Usamos window.location.pathname directo
+      // en vez de pathname (de usePathname) porque pathname puede quedar stale
+      // cuando React no re-renderiza después de un router.push (síntoma del bug
+      // del logo: pathname dice "/" pero usuario sigue visualmente en /nosotros)
+      const currentPath = window.location.pathname;
+      if (href === currentPath) {
         e.preventDefault();
         return;
       }
