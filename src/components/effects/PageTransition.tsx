@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { flushSync } from "react-dom";
+import { createPortal, flushSync } from "react-dom";
 import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 
@@ -48,14 +48,33 @@ export function PageTransition() {
   const pathname = usePathname();
   const [destText, setDestText] = useState("");
   const isAnimatingRef = useRef(false);
+  // SSR safety: createPortal requiere document.body, que no existe en el server.
+  // Esperamos al mount del cliente antes de intentar el portal.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   // Timeline activo: lo guardamos para poder matarlo si entra un click nuevo
   // antes de que termine. Sin esto, la timeline vieja seguiría ejecutándose
   // y haría router.push() al destino antiguo, sobrescribiendo al nuevo.
   const activeTimelineRef = useRef<gsap.core.Timeline | null>(null);
+  // ID del setTimeout de "navigation safety" — un push() de respaldo que se
+  // dispara 1.95s después de empezar la animación. Lo guardamos en ref para
+  // poder cancelarlo cuando entra una nav nueva; sin esto, un click rápido a
+  // otra sección dispara el push() viejo con un destino stale (ej: clickeas
+  // Portafolio y luego el logo → terminas en /portafolio porque el setTimeout
+  // de Portafolio sigue vivo con href stale).
+  const navSafetyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /** Dispara la animación cortina hacia una URL */
   const navigate = useCallback(
     (href: string, text?: string) => {
+      // SIEMPRE cancelar el setTimeout de respaldo de la nav anterior. Sin
+      // esto, un click rápido en otra ruta deja vivo un push() con destino
+      // stale que dispara más tarde y manda al usuario al lugar equivocado.
+      if (navSafetyTimeoutRef.current) {
+        clearTimeout(navSafetyTimeoutRef.current);
+        navSafetyTimeoutRef.current = null;
+      }
+
       // Click rápido durante una animación previa: matamos la animación
       // vieja (eso dispara onInterrupt → libera el flag) y navegamos directo
       // al nuevo destino sin animación. Esto previene 2 bugs:
@@ -162,10 +181,15 @@ export function PageTransition() {
       // garantiza que la URL cambie. El timing coincide con el momento ideal
       // del timeline (~1.95s después de empezar) — si la navegación ya
       // ocurrió, llamar router.push con la misma href es un noop.
-      setTimeout(() => {
+      //
+      // GUARDAMOS EL ID en navSafetyTimeoutRef para que la próxima navegación
+      // pueda cancelarlo. Sin esto, un click rápido a otra ruta dejaría vivo
+      // este setTimeout con href stale → push() al destino equivocado.
+      navSafetyTimeoutRef.current = setTimeout(() => {
         if (window.location.pathname !== href) {
           router.push(href);
         }
+        navSafetyTimeoutRef.current = null;
       }, 1950);
 
       // 5. Sale el texto (slide up + fade) y la línea se retrae hacia la derecha
@@ -239,7 +263,20 @@ export function PageTransition() {
 
   const words = destText.split(" ");
 
-  return (
+  // Montamos la cortina vía createPortal directo a document.body. Esto la
+  // saca del árbol DOM normal de React (que está adentro de layout.tsx >
+  // SmoothScrollProvider > children). Si algún componente del árbol — como
+  // SplineHero del home, que usa WebGL canvas con transforms internos —
+  // creara un stacking context que atrapara nuestro `position: fixed`, ya
+  // no importa, porque el portal hace que la cortina sea hija directa de
+  // <body>, hermana de #__next, totalmente fuera del alcance de Spline.
+  //
+  // Síntoma que esto arregla: desde el home, la cortina se cortaba a la
+  // altura del límite de HeroSection (~80% del viewport) y dejaba ver lo
+  // que estaba debajo. Desde otras rutas funcionaba bien porque no había
+  // Spline ahí.
+  if (!mounted) return null;
+  return createPortal(
     <div className="transition-overlay" aria-hidden="true">
       <svg className="overlay-svg" viewBox="0 0 1280 1000" preserveAspectRatio="none">
         <path ref={pathRef} className="overlay__path" d={PATH_INITIAL} />
@@ -262,7 +299,8 @@ export function PageTransition() {
           <div ref={ruleRef} className="ts-rule" />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
