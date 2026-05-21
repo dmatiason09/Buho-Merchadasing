@@ -370,7 +370,13 @@ nextjs-portal {
 .transition-overlay {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  /* z-index muy alto — arriba del cursor trail de AboutSection (100002) y
+     del TransitionOverlay panel (1000000). Solo el CustomCursor queda por
+     encima porque siempre debe seguir al mouse. Antes era 9999 y eso dejaba
+     que las imágenes de cursor trail (z-index 100002, appendeadas a
+     document.body desde AboutSection) se vieran ENCIMA de la cortina al
+     navegar desde el home → el famoso "corte" cream en la mitad. */
+  z-index: 1000001;
   pointer-events: none;
 }
 
