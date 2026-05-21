@@ -230,8 +230,11 @@ export function ContactHero() {
             ))}
           </div>
 
-          {/* FAQ items, debajo de las palabras en la misma columna izquierda */}
-          <div className="flex flex-col pt-16 pb-20">
+          {/* FAQ items, debajo de las palabras en la misma columna izquierda.
+              pb-[40vh] = casi medio viewport de aire al final del FAQ, para que
+              la última pregunta pueda leerse antes que aparezca el ServiciosFooter
+              dark debajo. */}
+          <div className="flex flex-col pt-16 pb-[40vh]">
             {FAQ_ITEMS.map((item, i) => (
               <FaqItem key={i} q={item.q} a={item.a} index={i} />
             ))}
