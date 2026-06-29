@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -220,15 +221,14 @@ export function NosotrosHero() {
       }}
     >
       {/* Imagen de fondo — visible cuando el cursor "revela" la mancha */}
-      <img
+      <Image
         src="/images/nosotros/team-photo.webp"
-        alt="Aymacode team"
+        alt="Buho team"
+        fill
+        sizes="100vw"
+        loading="eager"
         draggable={false}
         style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
           objectFit: "cover",
           zIndex: 0,
           pointerEvents: "none",
@@ -354,13 +354,6 @@ export function NosotrosHero() {
           </span>
         ))}
       </h1>
-
-      <style>{`
-        @keyframes nosotros-fade-in {
-          from { opacity: 0; transform: translateY(40px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </section>
   );
 }

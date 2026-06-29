@@ -22,7 +22,7 @@ export function HomeFooterCTA() {
           textAlign: "center",
         }}
       >
-        (¿Y la logística? También es nuestro lenguaje del amor.)
+        (¿Y la producción? También es nuestro lenguaje del amor.)
       </p>
 
       {/* Botón portafolio centrado */}

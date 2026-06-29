@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "aymacode-dev",
+      "name": "buho-dev",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
-      "cwd": "C:\\dev\\aymacode-copia",
+      "cwd": "C:\\Users\\denni\\OneDrive\\Desktop\\Buho Merchadasing",
       "port": 3000
     }
   ]

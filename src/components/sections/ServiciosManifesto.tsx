@@ -9,8 +9,8 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * ServiciosManifesto — sección manifesto estilo detroit.paris/services.
  *
- * MECÁNICA actual (4 imágenes, vamos agregando una por una):
- *   - Sección de calc(100vh + 2970px) — sticky 100vh + runway 2970px (= 33 scrolls)
+ * MECÁNICA actual (10 imágenes con el mismo patrón escalonado):
+ *   - Sección de calc(100vh + 5130px) — sticky 100vh + runway 5130px (= 57 scrolls)
  *   - Wrapper sticky: el texto del manifesto queda fijo en el viewport
  *   - Cada imagen tiene su PROPIO ScrollTrigger con start/end en pixeles
  *     absolutos. Cálculo: ~90px por scroll de mouse wheel (con Lenis
@@ -52,14 +52,16 @@ gsap.registerPlugin(ScrollTrigger);
  * imagen. Si una imagen futura tiene mas o menos scrolls totales, su
  * fade sigue siendo 4 scrolls (cambia solo la duracion del grow).
  *
- * Próximas imágenes se siguen agregando aquí, una por una.
+ * IMG 5–10 siguen el mismo patrón escalonado: cada una arranca +360px (4
+ * scrolls) después de la anterior (top-=720, -1080, -1440 … hasta -3240),
+ * con duración +=1890px. IMG 1–4 quedan documentadas arriba como referencia.
  */
 
 const MANIFESTO_PRIMARY = "PRODUCCIÓN A ESCALA CON CALIDAD ARTESANAL.";
 const MANIFESTO_SECONDARY = [
   "Diseño obsesivo.",
-  "Desarrollo riguroso.",
-  "Potenciado por Next.js, n8n & Spline.",
+  "Confección rigurosa.",
+  "Hecho a mano en Perú.",
 ];
 
 const COLOR_BG = "#ffffff";

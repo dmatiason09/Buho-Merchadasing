@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 const FINAL_GAP_VH = 10;
 
 const REVEAL_TEXT =
-  "La dirección creativa, para nosotros, es práctica. Significa entender qué es lo que hace avanzar una historia:";
+  "La producción, para nosotros, es práctica. Significa entender qué es lo que hace que una prenda valga la pena:";
 
 export function ManifestoBlock() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -202,8 +202,8 @@ export function ManifestoBlock() {
             }}
           >
             {[
-              <>Esos años los pasamos <em style={{ fontStyle: "italic" }}>haciendo</em>. No contando.</>,
-              <>Cada proyecto: presupuesto real, plazo real, alguien esperando resultados al otro lado.</>,
+              <>Esos años los pasamos <em style={{ fontStyle: "italic" }}>cosiendo</em>. No contando.</>,
+              <>Cada pedido: tela real, plazo real, una marca esperando su merch al otro lado.</>,
               <>Aprendimos, refinamos, dejamos atrás lo que no aguantó el tiempo.</>,
               <>Esto que ves ahora es lo que <em style={{ fontStyle: "italic" }}>sí</em> aguantó.</>,
             ].map((text, i) => (
@@ -270,7 +270,7 @@ export function ManifestoBlock() {
         textAlign: "center",
       }}
     >
-      {["IDENTIDAD", "PRESENCIA DIGITAL", "NARRATIVA", "IMPACTO"].map((word, i) => (
+      {["IDENTIDAD", "TELA", "PRODUCCIÓN", "MARCA"].map((word, i) => (
         <div key={word} style={{ overflow: "hidden" }}>
           <p
             ref={el => { keywordsRef.current[i] = el; }}

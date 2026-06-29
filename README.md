@@ -1,6 +1,6 @@
-# Aymacode — Sitio web
+# Buho — Sitio web
 
-Sitio de la agencia, construido con **Next.js 15** + **TypeScript** + **Tailwind CSS v4**.
+Sitio de Buho (merchandising y producción textil), construido con **Next.js 15** + **TypeScript** + **Tailwind CSS v4**.
 
 Stack diseñado para escalabilidad, SEO y motion/3D performance.
 
@@ -29,7 +29,7 @@ npm run start
 ## 📁 Estructura
 
 ```
-aymacode/
+buho/
 ├── public/
 │   └── images/              ← Assets estáticos (logo, fotos)
 │
@@ -43,23 +43,21 @@ aymacode/
 │   │           └── route.ts ← BACKEND: POST /api/contact
 │   │
 │   ├── components/
-│   │   ├── layout/          ← Navbar, Footer
-│   │   ├── effects/         ← MatrixCanvas, SplineHero (3D, motion)
-│   │   ├── sections/        ← HeroSection, AboutSection, ContactSection
-│   │   ├── forms/           ← ContactForm (con RHF + Zod)
-│   │   └── ui/              ← Botones, inputs reutilizables (futuro)
+│   │   ├── layout/          ← Navbar, SmoothScrollProvider (Lenis)
+│   │   ├── effects/         ← LoadingScreen, CustomCursor, PageTransition, SplineHero…
+│   │   └── sections/        ← HeroSection, AboutSection, ContactHero, ServiciosFooter…
+│   │                           (el form vive inline en ContactHero; no hay forms/ ni ui/)
 │   │
-│   │                        (hooks específicos: viven inline en cada sección)
+│   ├── providers/
+│   │   └── TransitionProvider.tsx ← Contexto de la transición de página
 │   │
 │   ├── lib/
 │   │   ├── api-client.ts    ← ⭐ Cliente HTTP centralizado
 │   │   └── schemas/
 │   │       └── contact.schema.ts ← Validación Zod (compartido cliente/servidor)
 │   │
-│   ├── services/
-│   │   └── contact.service.ts ← Métodos de API por dominio
-│   │
-│   └── types/               ← Tipos TypeScript globales (futuro)
+│   └── services/
+│       └── contact.service.ts ← Métodos de API por dominio
 │
 ├── .env.example             ← Plantilla versionada
 ├── .env.local               ← Tus valores reales (NO se sube a git)
@@ -99,7 +97,7 @@ Nunca pongas API keys en variables `NEXT_PUBLIC_*`.
 
 Ejemplo: cuando el usuario envía el formulario de contacto:
 
-1. **`ContactForm.tsx`** valida con Zod en cliente y llama a `contactService.send(data)`
+1. **`ContactHero.tsx`** (form inline) valida con Zod en cliente y llama a `contactService.send(data)`
 2. **`contact.service.ts`** llama a `apiClient.post('/api/contact', data)`
 3. **`api-client.ts`** hace `fetch('/api/contact', { method: 'POST', body: JSON.stringify(data), ... })`
 4. **`app/api/contact/route.ts`** recibe el request, revalida con Zod, loggea, opcionalmente envía a n8n
@@ -127,7 +125,7 @@ Este patrón se replica para CADA feature futura: blog, casos de estudio, suscri
 - [x] API Route para recibir leads
 - [x] Página /servicios (Hero + Manifesto + Lista interactiva)
 - [x] Página /contacto (Hero + form sticky + FAQ)
-- [ ] Página /portafolio (link en navbar ya existe, ruta pendiente)
+- [x] Página /portafolio (Hero + galería 3D scroll)
 - [ ] Sección de ERPs
 - [ ] Sección de automatizaciones n8n
 - [ ] CMS para casos de estudio (Sanity)
@@ -137,13 +135,13 @@ Este patrón se replica para CADA feature futura: blog, casos de estudio, suscri
 
 ## 🧪 Performance optimizations (vs versión original)
 
-- ✅ `requestAnimationFrame` en lugar de `setInterval` (matrix canvas)
+- ✅ `requestAnimationFrame` en lugar de `setInterval` (LoadingScreen, cursor, scrubs)
 - ✅ `IntersectionObserver` para pausar lógica cuando elementos están fuera de pantalla (word reveal)
 - ✅ Cleanup correcto de event listeners (no leaks)
-- ✅ Image optimization automática con `next/image`
+- ⚠️ Image optimization: parcial — el logo usa `next/image`, pero varias secciones aún usan `<img>` plano (pendiente migrar)
 - ✅ Font loading con `preconnect` y `display=swap`
 - ✅ Server-Side Rendering para SEO
 
 ---
 
-**Mantenido por Aymacode.** Para preguntas o features, abre un issue.
+**Mantenido por Buho.** Para preguntas o features, abre un issue.

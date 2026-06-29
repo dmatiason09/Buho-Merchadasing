@@ -108,7 +108,7 @@ export function Navbar() {
         <div style={{ position: "relative", width: "clamp(48px, 5vw, 72px)", height: "clamp(48px, 5vw, 72px)" }}>
           <Image
             src={isDark ? "/images/logo-white.webp" : "/images/logo-black.png"}
-            alt="Aymacode"
+            alt="Buho"
             fill
             className="object-contain"
           />
@@ -132,7 +132,6 @@ export function Navbar() {
                 href={link.href}
                 data-transition
                 data-transition-text={link.transitionText}
-                data-cursor-style="link"
                 className={`transition-colors hover:opacity-80 ${
                   isActive ? activeColor : inactiveColor
                 }`}

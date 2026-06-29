@@ -18,6 +18,10 @@ export interface ContactResponse {
  * - Lógica de negocio agrupada (transformaciones, mapeos)
  */
 export const contactService = {
-  send: (data: ContactFormData) =>
-    apiClient.post<ContactResponse>("/api/contact", data),
+  send: (data: ContactFormData, meta?: { hp?: string }) =>
+    apiClient.post<ContactResponse>("/api/contact", {
+      ...data,
+      // honeypot anti-bot (campo oculto; vacío en envíos humanos)
+      company_website: meta?.hp ?? "",
+    }),
 };

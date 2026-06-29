@@ -9,7 +9,7 @@ if (typeof window !== "undefined") {
 }
 
 /**
- * NosotrosLogo3D — sección con el logo 3D realista de Aymacode.
+ * NosotrosLogo3D — sección con el logo 3D realista de Buho.
  *
  * Comportamiento (estilo Floema):
  *   - Sección de 150vh (más alta que el viewport)
@@ -187,7 +187,7 @@ export function NosotrosLogo3D() {
             color: "#1F1F1F",
           }}
         >
-          Sobrepensando espacios más allá de las expectativas
+          Sobrepensando cada prenda más allá de las expectativas
         </h3>
 
         <div
@@ -239,8 +239,8 @@ export function NosotrosLogo3D() {
       {/* Logo 3D realista — centrado por el flex del section, totalmente visible */}
       <img
         ref={logoRef}
-        src="/images/nosotros/logo-realista.webp"
-        alt="Aymacode logo 3D"
+        src="/images/nosotros/logo-realista.png"
+        alt="Buho logo 3D"
         draggable={false}
         style={{
           position: "relative",

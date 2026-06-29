@@ -4,13 +4,13 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
 const GIANT_TEXT =
-  "LLEVAMOS AÑOS HACIENDO LO QUE LA INDUSTRIA RECIÉN ESTÁ APRENDIENDO";
+  "LLEVAMOS AÑOS COSIENDO LO QUE OTRAS MARCAS RECIÉN ESTÁN IMAGINANDO";
 
 const STUDIO_TEXT =
-  "A creative studio merging design, motion and code into one inevitable piece.";
+  "A textile studio merging design, craft and production into one inevitable garment.";
 
 const HEADER_TEXT =
-  "Led by a hyper-proactive perfectionist, PR Strategist turned Producer turned Creative Director who refuses to stay in a single lane.";
+  "Born from a family textile workshop and a love for the culture we wear, where every garment is made by hand to last.";
 
 const SCATTERED_IMAGES = [
   { src: "/images/scroll-01.jpg", left: "8%",  top: "8%",  w: 370, rot: -3, z: 1 },

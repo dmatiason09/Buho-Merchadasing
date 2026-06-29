@@ -19,7 +19,7 @@ export const contactSchema = z.object({
     .max(150, "El email es muy largo"),
   company: z.string().max(150).optional().or(z.literal("")),
   serviceType: z.enum(
-    ["static", "motion", "cms-3d", "erp", "automation", "other"],
+    ["camisetas", "hoodies", "gorras", "bordado", "mayoreo", "other"],
     {
       errorMap: () => ({ message: "Selecciona un tipo de servicio" }),
     }
@@ -38,10 +38,10 @@ export const SERVICE_TYPE_OPTIONS: Array<{
   value: ContactFormData["serviceType"];
   label: string;
 }> = [
-  { value: "static", label: "Página estática" },
-  { value: "motion", label: "Motion site" },
-  { value: "cms-3d", label: "CMS / 3D" },
-  { value: "erp", label: "ERP a medida" },
-  { value: "automation", label: "Automatización con n8n" },
+  { value: "camisetas", label: "Camisetas" },
+  { value: "hoodies", label: "Hoodies / Polerones" },
+  { value: "gorras", label: "Gorras" },
+  { value: "bordado", label: "Estampado / Bordado" },
+  { value: "mayoreo", label: "Pedido al por mayor" },
   { value: "other", label: "Otro / Combinación" },
 ];

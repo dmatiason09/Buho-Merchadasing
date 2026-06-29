@@ -6,10 +6,6 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
-  // Spline runtime needs this for the WASM/canvas to work properly.
-  experimental: {
-    optimizePackageImports: ["@splinetool/runtime"],
-  },
 };
 
 export default nextConfig;

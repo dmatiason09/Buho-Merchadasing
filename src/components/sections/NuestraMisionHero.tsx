@@ -11,29 +11,33 @@ if (typeof window !== "undefined") {
 const TITLE_WORDS = ["Nuestra", "Mision"];
 
 /**
- * Sección "Nuestra Misión" — título grande stackeado con el mismo efecto
- * letter-rise center-out que NosotrosHero. Cada letra arranca debajo de su
- * máscara y sube a su sitio cuando la sección entra al viewport, con stagger
- * "center" (las letras del medio aparecen primero, las de los costados al
- * final).
+ * Sección "Nuestra Misión" — el título grande "NUESTRA MISIÓN" usa el efecto
+ * letter-rise center-out (cada letra arranca debajo de su máscara y sube a su
+ * sitio, con stagger desde el centro). El bloque de texto chico de la DERECHA
+ * entra deslizándose desde la derecha. Ambos se disparan al entrar la sección.
  */
 export function NuestraMisionHero() {
   const sectionRef = useRef<HTMLElement>(null);
   const letterRefs = useRef<HTMLSpanElement[][]>(TITLE_WORDS.map(() => []));
+  const missionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
     const wordsLetters = letterRefs.current;
+    const mission = missionRef.current;
 
     const ctx = gsap.context(() => {
-      // Letras arrancan ARRIBA de su máscara (yPercent: -110) y bajan a sitio.
-      // Es el espejo del efecto "Nuestro Equipo" (que sube desde abajo)
+      // Título: letras arrancan ARRIBA de su máscara (yPercent: -110) y bajan
+      // a sitio. Es el espejo del efecto "Nuestro Equipo" (que sube desde abajo).
       wordsLetters.forEach((letters) => {
         gsap.set(letters, { yPercent: -110 });
       });
+      // Bloque de misión (derecha): arranca fuera del viewport por la DERECHA
+      // (xPercent: 100) e invisible. El overflow:hidden del sticky lo recorta.
+      if (mission) gsap.set(mission, { xPercent: 100, opacity: 0 });
 
-      // Esperamos un frame + refresh para que el pin de QuienesSomos haya
+      // Esperamos un frame + refresh para que los pines previos hayan
       // extendido la página ANTES de calcular la posición de este trigger
       requestAnimationFrame(() => {
         ScrollTrigger.create({
@@ -41,6 +45,7 @@ export function NuestraMisionHero() {
           start: "top 40%",
           once: true,
           onEnter: () => {
+            // Título: letter-rise center-out (efecto original, intacto).
             wordsLetters.forEach((letters) => {
               gsap.to(letters, {
                 yPercent: 0,
@@ -49,6 +54,15 @@ export function NuestraMisionHero() {
                 stagger: { each: 0.08, from: "center" },
               });
             });
+            // Texto de la derecha: entra deslizándose desde la DERECHA.
+            if (mission) {
+              gsap.to(mission, {
+                xPercent: 0,
+                opacity: 1,
+                duration: 1.1,
+                ease: "power4.out",
+              });
+            }
           },
         });
         ScrollTrigger.refresh();
@@ -87,6 +101,7 @@ export function NuestraMisionHero() {
       >
       {/* Bloque de misión, alineado arriba de las letras "ON" de MISION */}
       <div
+        ref={missionRef}
         style={{
           position: "absolute",
           top: "6vh",
@@ -99,18 +114,18 @@ export function NuestraMisionHero() {
           letterSpacing: "-0.03em",
           color: "#1F1F1F",
           pointerEvents: "none",
+          willChange: "transform, opacity",
         }}
       >
         <p style={{ margin: "0 0 0.9em 0" }}>
-          Nuestra misión es eliminar el espacio entre lo que tu empresa hace
-          cada día y lo que la tecnología debería resolver sin que lo notes —
-          donde diseño e ingeniería viven en el mismo estudio, no en
-          departamentos separados.
+          Nuestra misión es eliminar el espacio entre lo que tu marca imagina
+          y lo que termina puesto en una prenda — donde diseño y producción
+          viven bajo el mismo techo, no en fábricas separadas.
         </p>
         <p style={{ margin: 0 }}>
-          Ningún cliente sale de aquí con código ajeno que no entiende. Cada
-          sistema se entrega listo para escalar, no para ser reescrito en seis
-          meses cuando el negocio crezca.
+          Ninguna marca sale de aquí con una prenda que no la represente. Cada
+          pedido se entrega listo para vender, no para quedarse guardado en una
+          caja seis meses.
         </p>
       </div>
 

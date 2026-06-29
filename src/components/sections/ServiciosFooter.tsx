@@ -9,8 +9,9 @@ if (typeof window !== "undefined") {
 }
 
 /**
- * ServiciosFooter — sección vacía con el efecto slide-pinning-overscroll
- * intacto. Lista para repoblar con contenido nuevo.
+ * ServiciosFooter — footer compartido (reutilizado en /servicios, /contacto y
+ * /nosotros). Wordmark gigante "Buho", bloques de contacto, enlaces a IAs,
+ * social magnético y CTA "Colaboremos", con el efecto slide-pinning-overscroll.
  */
 
 // Botón social con efecto magnético — el botón se atrae al cursor dentro
@@ -220,10 +221,10 @@ export function ServiciosFooter() {
       }}
     >
       {/* Pregúntale a la IA — 5 logos clickables que abren cada IA con un
-          prompt pre-cargado preguntando sobre Aymacode Studio */}
+          prompt pre-cargado preguntando sobre Buho */}
       {(() => {
         const aiQuery =
-          "¿Qué es Aymacode Studio? Cuéntame sobre este estudio creativo peruano que diseña y construye webs, aplicaciones web, ERPs hechos a medida y automatizaciones.";
+          "¿Qué es Buho? Cuéntame sobre esta marca peruana de merchandising textil que diseña y produce camisetas, hoodies y gorras a medida para otras marcas.";
         const q = encodeURIComponent(aiQuery);
         const aiLinks = [
           {
@@ -370,7 +371,7 @@ export function ServiciosFooter() {
       })()}
 
       {/* Bloque de redes sociales — 4 círculos con efecto magnético,
-          posicionados justo arriba de "ayma" en el lado izquierdo */}
+          posicionados justo arriba de "Buho" en el lado izquierdo */}
       <div
         style={{
           position: "absolute",
@@ -386,7 +387,7 @@ export function ServiciosFooter() {
             <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77Z" />
           </svg>
         </MagneticSocial>
-        <MagneticSocial href="https://www.instagram.com/" label="Instagram">
+        <MagneticSocial href="https://www.instagram.com/buho.peru_oficial/" label="Instagram">
           <svg
             width="22"
             height="22"
@@ -521,7 +522,7 @@ export function ServiciosFooter() {
           </div>
           <a
             className="cta-fly"
-            href="mailto:studio@equipo-aymacode.com"
+            href="mailto:studio@equipo-buho.com"
             style={{
               display: "inline-block",
               fontSize: "clamp(24px, 2.3vw, 38px)",
@@ -531,7 +532,7 @@ export function ServiciosFooter() {
               textDecoration: "none",
             }}
           >
-            {renderFlyText("studio@equipo-aymacode.com")}
+            {renderFlyText("studio@equipo-buho.com")}
           </a>
         </div>
         <div>
@@ -548,7 +549,7 @@ export function ServiciosFooter() {
           </div>
           <a
             className="cta-fly"
-            href="mailto:trabajo@equipo-aymacode.com"
+            href="mailto:trabajo@equipo-buho.com"
             style={{
               display: "inline-block",
               fontSize: "clamp(24px, 2.3vw, 38px)",
@@ -558,7 +559,7 @@ export function ServiciosFooter() {
               textDecoration: "none",
             }}
           >
-            {renderFlyText("trabajo@equipo-aymacode.com")}
+            {renderFlyText("trabajo@equipo-buho.com")}
           </a>
         </div>
       </div>
@@ -579,7 +580,7 @@ export function ServiciosFooter() {
           zIndex: 2,
         }}
       >
-        © 2026 Aymacode Studio
+        © 2026 Buho
       </div>
 
       {/* Wordmark gigante — fontSize en vw para que llene el ancho del viewport */}
@@ -603,7 +604,7 @@ export function ServiciosFooter() {
           pointerEvents: "none",
         }}
       >
-        ayma
+        Buho
       </h1>
     </footer>
   );

@@ -34,31 +34,31 @@ type Service = {
 
 const SERVICES: Service[] = [
   {
-    word: "Branding",
-    tag: "IDENTITY",
+    word: "Diseño",
+    tag: "DISEÑO DE MARCA",
     image: "/images/bento/02-typography.webp",
-    href: "/servicios/branding",
+    href: "/servicios/diseno",
     color: "#0A0A0A",
   },
   {
-    word: "Web Design",
-    tag: "DEVELOPMENT",
+    word: "Producción",
+    tag: "PRODUCCIÓN TEXTIL",
     image: "/images/bento/06-convert.webp",
-    href: "/servicios/web-design",
+    href: "/servicios/produccion",
     color: "#0A0A0A",
   },
   {
-    word: "ERPs",
-    tag: "SYSTEMS",
+    word: "Estampado",
+    tag: "ESTAMPADO & BORDADO",
     image: "/images/bento/05-flatlay.webp",
-    href: "/servicios/erps",
+    href: "/servicios/estampado",
     color: "#0A0A0A",
   },
   {
-    word: "Automatizaciones",
-    tag: "WORKFLOWS",
+    word: "Mayoreo",
+    tag: "PEDIDOS AL POR MAYOR",
     image: "/images/bento/07-wall.webp",
-    href: "/servicios/automatizaciones",
+    href: "/servicios/mayoreo",
     color: "#0A0A0A",
   },
 ];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -137,15 +138,15 @@ export function ServiciosFeatured() {
               willChange: "transform",
             }}
           >
-            <img
+            <Image
               src={item.src}
               alt=""
+              fill
+              sizes="(max-width: 640px) 50vw, 45vw"
+              loading="eager"
               draggable={false}
               style={{
-                width: "100%",
-                height: "100%",
                 objectFit: "cover",
-                display: "block",
               }}
             />
           </div>

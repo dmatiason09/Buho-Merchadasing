@@ -25,14 +25,14 @@ interface Project {
 
 // Cada card tiene su propio startT → permite overlapping de timelines
 const PROJECTS: Project[] = [
-  { src: "/images/portafolio/01.jpeg", title: "Magic City", categories: ["FILM"], offsetX: -18, offsetY: -14, startT: 0, driftY: -10 },
-  { src: "/images/portafolio/02.jpeg", title: "Project 02", categories: ["FILM"], offsetX: -7, offsetY: -2, startT: 0.4, baseBlur: 4, entryDuration: 0.4, driftX: -22, driftY: 20, lifetimeT: 0.9 },
-  { src: "/images/portafolio/03.jpeg", title: "Project 03", categories: ["FILM"], offsetX: -14, offsetY: -7, startT: 0.9, baseBlur: 4, entryDuration: 0.4, driftX: 30, driftY: 20, lifetimeT: 0.9, exitBlur: 10 },
-  { src: "/images/portafolio/04.jpeg", title: "Project 04", categories: ["FILM"], offsetX: 2, offsetY: -2, startT: 1.2, baseBlur: 4, entryDuration: 0.4, driftX: -20, driftY: -10, lifetimeT: 0.9 },
-  { src: "/images/portafolio/05.jpeg", title: "Project 05", categories: ["FILM"], offsetX: 10, offsetY: -10, startT: 1.5, baseBlur: 4, entryDuration: 0.4, driftX: 25, driftY: -18, lifetimeT: 0.9 },
-  { src: "/images/portafolio/01.jpeg", title: "Project 06", categories: ["FILM"], offsetX: 18, offsetY: 8, startT: 1.8, baseBlur: 4, entryDuration: 0.4, driftX: -30, driftY: -15, lifetimeT: 0.9 },
-  { src: "/images/portafolio/02.jpeg", title: "Project 07", categories: ["FILM"], offsetX: -6, offsetY: -3, startT: 2.1, baseBlur: 4, entryDuration: 0.4, driftX: 32, driftY: 12, lifetimeT: 0.9 },
-  { src: "/images/portafolio/03.jpeg", title: "Project 08", categories: ["FILM"], offsetX: 6, offsetY: -13, startT: 2.4, baseBlur: 4, entryDuration: 0.4, driftX: -18, driftY: 24, lifetimeT: 0.9 },
+  { src: "/images/portafolio/01.jpeg", title: "Magic City", categories: ["MERCH"], offsetX: -18, offsetY: -14, startT: 0, driftY: -10 },
+  { src: "/images/portafolio/02.jpeg", title: "Project 02", categories: ["MERCH"], offsetX: -7, offsetY: -2, startT: 0.4, baseBlur: 4, entryDuration: 0.4, driftX: -22, driftY: 20, lifetimeT: 0.9 },
+  { src: "/images/portafolio/03.jpeg", title: "Project 03", categories: ["MERCH"], offsetX: -14, offsetY: -7, startT: 0.9, baseBlur: 4, entryDuration: 0.4, driftX: 30, driftY: 20, lifetimeT: 0.9, exitBlur: 10 },
+  { src: "/images/portafolio/04.jpeg", title: "Project 04", categories: ["MERCH"], offsetX: 2, offsetY: -2, startT: 1.2, baseBlur: 4, entryDuration: 0.4, driftX: -20, driftY: -10, lifetimeT: 0.9 },
+  { src: "/images/portafolio/05.jpeg", title: "Project 05", categories: ["MERCH"], offsetX: 10, offsetY: -10, startT: 1.5, baseBlur: 4, entryDuration: 0.4, driftX: 25, driftY: -18, lifetimeT: 0.9 },
+  { src: "/images/portafolio/01.jpeg", title: "Project 06", categories: ["MERCH"], offsetX: 18, offsetY: 8, startT: 1.8, baseBlur: 4, entryDuration: 0.4, driftX: -30, driftY: -15, lifetimeT: 0.9 },
+  { src: "/images/portafolio/02.jpeg", title: "Project 07", categories: ["MERCH"], offsetX: -6, offsetY: -3, startT: 2.1, baseBlur: 4, entryDuration: 0.4, driftX: 32, driftY: 12, lifetimeT: 0.9 },
+  { src: "/images/portafolio/03.jpeg", title: "Project 08", categories: ["MERCH"], offsetX: 6, offsetY: -13, startT: 2.4, baseBlur: 4, entryDuration: 0.4, driftX: -18, driftY: 24, lifetimeT: 0.9 },
 ];
 
 const SCROLL_PER_CARD_VH = 830; // 10 scrolls = full lifecycle de UNA card
@@ -398,7 +398,7 @@ export function Portafolio3DScroll() {
                 fontFamily: '"Universo", sans-serif',
                 fontSize: "10px",
                 fontWeight: 600,
-                color: "#F73C18",
+                color: "#5b3a27",
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
               }}>

@@ -19,7 +19,7 @@
 
 /**
  * Por defecto las llamadas son relativas (mismo origen → API Routes).
- * Si en el futuro tenemos un backend externo (ej. en api.aymacode.com),
+ * Si en el futuro tenemos un backend externo (ej. en api.buho.com),
  * solo cambiamos esta env var y todo sigue funcionando.
  */
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";

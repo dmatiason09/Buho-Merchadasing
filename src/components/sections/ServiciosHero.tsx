@@ -9,14 +9,14 @@ import gsap from "gsap";
  * Combina:
  *  - Stack de palabras grandes con entrada 3D (rotationX desde -100° con stagger)
  *  - Imagen que sigue al cursor con tilt 3D según velocidad (efecto magnetic-trail
- *    que antes vivía en /servicios/branding).
+ *    que antes vivía en /servicios/diseno).
  */
 
 // Estilo detroit.paris/services — "BUILDING / CONTENT FACTORIES / FOR LUXURY BRANDS"
 const BIG_WORDS = [
-  "Construyendo",
-  "Fábricas de Contenido",
-  "para Marcas de Lujo",
+  "Producimos",
+  "el merch de",
+  "tu marca",
 ];
 
 // Paleta estilo detroit.paris/services — blanco + negro punzante

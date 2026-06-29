@@ -150,7 +150,7 @@ export function PortafolioHero() {
               fontFamily: '"Heatwood", cursive',
               fontWeight: 400,
               fontSize: "1.05em",
-              color: "#F73C18",
+              color: "#5b3a27",
               textTransform: "none",
               letterSpacing: "0",
               display: "inline-block",

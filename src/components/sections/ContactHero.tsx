@@ -31,36 +31,38 @@ const BIG_WORD_INDENT = [0, 8, 12, 0]; // vw
 const FAQ_ITEMS: Array<{ q: string; a: string }> = [
   {
     q: "¿Con qué tipo de clientes trabajan?",
-    a: "Trabajamos con fundadores, agencias y empresas que quieren elevar su presencia digital. Desde startups buscando lanzar su primer sitio hasta marcas establecidas que necesitan rediseñar su web o automatizar procesos internos con n8n.",
+    a: "Trabajamos con marcas, creadores, empresas y eventos que quieren su propio merch. Desde un emprendedor pidiendo sus primeras 50 camisetas hasta marcas establecidas que producen colecciones completas para su comunidad.",
   },
   {
-    q: "¿Cuánto cuesta una página web?",
-    a: "Depende del alcance. Una landing estática parte desde un rango accesible; un motion site con 3D y animaciones avanzadas implica más trabajo de diseño y desarrollo. Cuéntanos tu idea por el formulario y te enviamos un estimado real, no genérico.",
+    q: "¿Cuánto cuesta producir mi merch?",
+    a: "Depende del producto y la cantidad. Una camiseta básica parte desde un rango accesible; prendas con bordado, etiquetas y empaque personalizado implican más trabajo. Cuéntanos tu idea por el formulario y te enviamos un estimado real, no genérico.",
   },
   {
-    q: "¿Cuánto tiempo toma desarrollar un sitio?",
-    a: "Una landing de 1-3 secciones la entregamos en 1-2 semanas. Sitios con CMS, animaciones complejas o integraciones backend pueden tomar de 3 a 8 semanas. Te damos un cronograma claro antes de empezar.",
+    q: "¿Cuánto tiempo toma producir un pedido?",
+    a: "Un pedido pequeño de estampado lo entregamos en 1-2 semanas. Producciones grandes con confección desde cero, bordado o varios diseños pueden tomar de 3 a 8 semanas. Te damos un cronograma claro antes de empezar.",
   },
   {
-    q: "¿También hacen ERPs y automatizaciones?",
-    a: "Sí. Construimos ERPs a medida con Next.js + Postgres y automatizamos procesos con n8n: leads, facturación, integraciones con WhatsApp, Notion, Google Sheets, etc. Si tienes un workflow manual que te hace perder horas, podemos automatizarlo.",
+    q: "¿Tienen cantidad mínima de pedido?",
+    a: "Sí, manejamos mínimos accesibles según la prenda y la técnica. Producimos desde tiradas chicas para lanzar tu marca hasta pedidos por mayor para empresas y eventos. Cuéntanos cuántas piezas necesitas y lo cuadramos.",
   },
   {
     q: "¿Cómo es el proceso de trabajo?",
-    a: "1) Llamada inicial para entender tu visión y restricciones. 2) Propuesta con alcance, plazos y precio. 3) Diseño en figma con iteraciones. 4) Desarrollo con previews semanales. 5) Lanzamiento + transferencia. 6) Soporte continuo opcional.",
+    a: "1) Llamada inicial para entender tu marca y tu idea. 2) Propuesta con prenda, técnica, plazos y precio. 3) Diseño y mockups con iteraciones. 4) Muestra física antes de producir en volumen. 5) Producción + entrega. 6) Reposiciones cuando las necesites.",
   },
   {
-    q: "¿Ofrecen mantenimiento después del lanzamiento?",
-    a: "Sí, con planes mensuales que incluyen actualizaciones de contenido, monitoreo de performance, correcciones y mejoras iterativas. Lo discutimos al cerrar el proyecto.",
+    q: "¿Puedo repetir un pedido después?",
+    a: "Sí. Guardamos tus diseños y moldes para que repongas stock cuando quieras, con la misma calidad y sin empezar de cero. Lo coordinamos apenas se te acabe el inventario.",
   },
 ];
 
 // Paleta tomada visualmente de douglus.site/contact
-const COLOR_BG = "#EFE8D6";                           // crema/beige cálido del fondo
-const COLOR_FG = "#0A0A0A";                           // negro casi puro para textos pequeños
-const COLOR_BIG = "#2A2A2A";                          // negro suave (no tan oscuro) para las palabras grandes
-const COLOR_MUTED = "rgba(10, 10, 10, 0.55)";          // labels EMAIL/PHONE/BASED
-const COLOR_RULE = "rgba(10, 10, 10, 0.14)";           // separadores
+const COLOR_BG = "#ffffff";                           // blanco — fondo de la zona derecha (formulario)
+const COLOR_BROWN = "#5b3a27";                         // marrón de marca — fondo de la zona izquierda
+const COLOR_FG = "#0A0A0A";                           // negro casi puro para textos del form (sobre blanco)
+const COLOR_ON_DARK = "#F5F1E8";                      // crema — palabras grandes + FAQ (sobre marrón)
+const COLOR_MUTED = "rgba(10, 10, 10, 0.55)";          // labels EMAIL/PHONE/BASED (sobre blanco)
+const COLOR_RULE = "rgba(10, 10, 10, 0.14)";           // separadores del form (sobre blanco)
+const COLOR_RULE_DARK = "rgba(245, 241, 232, 0.22)";   // separadores del FAQ (sobre marrón)
 
 type SubmitStatus =
   | { state: "idle" }
@@ -81,6 +83,7 @@ const labelStyle = {
 
 export function ContactHero() {
   const rootRef = useRef<HTMLElement>(null);
+  const hpRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<SubmitStatus>({ state: "idle" });
 
   const {
@@ -102,7 +105,7 @@ export function ContactHero() {
   const onSubmit = async (values: ContactFormData) => {
     setStatus({ state: "loading" });
     try {
-      const res = await contactService.send(values);
+      const res = await contactService.send(values, { hp: hpRef.current?.value });
       setStatus({ state: "success", message: res.message });
       reset();
     } catch (err) {
@@ -177,8 +180,8 @@ export function ContactHero() {
       className="ch-root relative min-h-[100dvh] w-full flex flex-col"
       style={{ backgroundColor: COLOR_BG, color: COLOR_FG }}
     >
-      {/* Fondo blanco-crema SOLO en la zona izquierda (palabras grandes).
-          Color intermedio entre #FFFFFF y el crema del form (#EFE8D6)
+      {/* Fondo MARRÓN de marca SOLO en la zona izquierda (palabras grandes + FAQ).
+          La derecha (formulario) queda en blanco (COLOR_BG de la sección)
           → división por color, sin línea visible.
           Ancho = padding-left (40) + columna 1 (3.5fr de 5fr) + gap completo (32). */}
       <div
@@ -187,7 +190,7 @@ export function ContactHero() {
         style={{
           width:
             "calc((100% - 80px - 1px - 64px) * 3.5 / 5 + 40px + 32px)",
-          backgroundColor: "#F7F4EB",
+          backgroundColor: COLOR_BROWN,
           zIndex: 0,
         }}
       />
@@ -198,7 +201,7 @@ export function ContactHero() {
       {/* Grid combinado: palabras + FAQ en col izq, form sticky en col der */}
       <div className="relative grid grid-cols-1 md:grid-cols-[minmax(0,3.5fr)_1px_minmax(0,1.5fr)] gap-x-8 px-6 md:px-10">
         {/* === Columna izquierda: palabras grandes + FAQ === */}
-        <div style={{ gridColumn: 1 }} className="flex flex-col min-w-0">
+        <div style={{ gridColumn: 1, backgroundColor: COLOR_BROWN }} className="flex flex-col min-w-0">
           {/* Sub-grid de 4 rows para las palabras grandes (altura: 1 viewport) */}
           <div className="grid grid-rows-4 gap-y-5 h-[calc(100dvh-80px)] min-h-0">
             {BIG_WORDS.map((word, i) => (
@@ -219,7 +222,7 @@ export function ContactHero() {
                     lineHeight: 0.85,
                     fontWeight: 800,
                     letterSpacing: "-0.03em",
-                    color: COLOR_BIG,
+                    color: COLOR_ON_DARK,
                     fontFamily:
                       'var(--font-plus-jakarta), "Plus Jakarta Sans", sans-serif',
                   }}
@@ -249,14 +252,11 @@ export function ContactHero() {
         />
 
         {/* Formulario — col 3, STICKY: sigue al scroll hasta el final del section */}
+        {/* Form: en móvil fluye a ancho completo debajo del FAQ; en desktop
+            es la columna 3 sticky (split de un viewport). */}
         <div
-          className="hidden md:flex flex-col gap-5 justify-center"
+          className="flex flex-col gap-5 pt-4 pb-20 md:justify-center md:sticky md:top-20 md:self-start md:h-[calc(100dvh-80px)] md:[grid-column:3] md:pt-0 md:pb-0"
           style={{
-            gridColumn: 3,
-            position: "sticky",
-            top: "80px",
-            alignSelf: "flex-start",
-            height: "calc(100dvh - 80px)",
             fontFamily: 'var(--font-dm-sans), "DM Sans", sans-serif',
           }}
         >
@@ -265,7 +265,19 @@ export function ContactHero() {
             noValidate
             className="flex flex-col gap-7"
           >
-            <div className="grid grid-cols-2 gap-6">
+            {/* Honeypot anti-bot: oculto para humanos; si un bot lo llena,
+                el servidor descarta el lead. tabIndex/-1 + aria-hidden lo
+                sacan del foco y de lectores de pantalla. */}
+            <input
+              ref={hpRef}
+              type="text"
+              name="company_website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="hidden"
+            />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="ch-info-row">
                 <label
                   htmlFor="ch-name"
@@ -376,7 +388,7 @@ export function ContactHero() {
               <textarea
                 id="ch-message"
                 rows={3}
-                placeholder="Cuéntanos sobre tu proyecto"
+                placeholder="Cuéntanos sobre tu pedido"
                 className={`${inputBase} resize-none`}
                 style={{ borderBottomColor: COLOR_RULE, color: COLOR_FG }}
                 {...register("message")}
@@ -391,7 +403,6 @@ export function ContactHero() {
             <button
               type="submit"
               disabled={status.state === "loading"}
-              data-cursor-style="cta"
               className="ch-info-row group inline-flex items-center gap-3 self-start py-3 text-[18px] tracking-[-0.01em] disabled:opacity-50"
               style={{
                 color: COLOR_FG,
@@ -446,12 +457,11 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
   return (
     <div
       className="border-b"
-      style={{ borderColor: COLOR_RULE }}
+      style={{ borderColor: COLOR_RULE_DARK }}
     >
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        data-cursor-style="link"
         aria-expanded={open}
         aria-controls={`faq-answer-${index}`}
         className="group flex w-full items-center justify-between py-6 text-left"
@@ -463,7 +473,7 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
         <span
           className="font-medium leading-tight"
           style={{
-            color: COLOR_FG,
+            color: COLOR_ON_DARK,
             fontSize: "clamp(16px, 1.35vw, 22px)",
             letterSpacing: "-0.01em",
           }}
@@ -474,7 +484,7 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
           aria-hidden="true"
           className="ml-4 shrink-0 transition-transform duration-300"
           style={{
-            color: COLOR_FG,
+            color: COLOR_ON_DARK,
             fontSize: "clamp(20px, 1.5vw, 26px)",
             transform: open ? "rotate(45deg)" : "rotate(0deg)",
             lineHeight: 1,
@@ -492,8 +502,8 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
         <p
           className="pb-6 max-w-[60ch] leading-relaxed"
           style={{
-            color: COLOR_FG,
-            opacity: 0.75,
+            color: COLOR_ON_DARK,
+            opacity: 0.8,
             fontSize: "clamp(14px, 1vw, 16px)",
             fontFamily: 'var(--font-dm-sans), "DM Sans", sans-serif',
           }}

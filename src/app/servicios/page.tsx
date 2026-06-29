@@ -8,17 +8,17 @@ import { ServiciosFooter } from "@/components/sections/ServiciosFooter";
 export const metadata: Metadata = {
   title: "Servicios",
   description:
-    "Diseño web, desarrollo, ERPs y automatizaciones con n8n. Construimos webs que convierten.",
+    "Diseño de merch, producción textil, estampado y bordado, y pedidos al por mayor — tu marca hecha prenda.",
 };
 
 export default function ServiciosPage() {
   return (
-    <>
+    <main>
       <ServiciosHero />
       <ServiciosManifesto />
       <ServiciosList />
       <ServiciosFeatured />
       <ServiciosFooter />
-    </>
+    </main>
   );
 }

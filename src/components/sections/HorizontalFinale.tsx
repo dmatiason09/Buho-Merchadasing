@@ -244,7 +244,7 @@ export function HorizontalFinale() {
                   fontStyle: "normal",
                   fontSize: "clamp(38px, 5.5vw, 88px)",
                   fontWeight: 400,
-                  color: "#E8271E",
+                  color: "#5b3a27",
                   textTransform: "none",
                   letterSpacing: "-0.01em",
                   lineHeight: 1.5,
@@ -296,7 +296,7 @@ export function HorizontalFinale() {
             >
               <div>Basados en</div>
               <div>Lima, Perú,</div>
-              <div>Apasionados por el diseño & código</div>
+              <div>Apasionados por la tela & el detalle</div>
             </div>
           </div>
         </div>

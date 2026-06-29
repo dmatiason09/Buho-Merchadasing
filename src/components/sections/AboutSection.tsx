@@ -21,9 +21,9 @@ const CURSOR_IMAGES = [
   "/images/manifesto/10.jpg",
 ];
 
-const BIG_TEXT = "Estudio creativo que fusiona diseño, motion y código — y automatiza los sistemas que hacen crecer tu negocio.";
+const BIG_TEXT = "Taller textil que fusiona diseño, confección y detalle — y convierte tu marca en prendas que la gente quiere usar.";
 const SMALL_TEXT =
-  "Diseñamos ERPs a medida que ordenan tu operación, conectan tus equipos y eliminan el trabajo repetitivo — sistemas hechos para escalar con tu negocio, no para frenarlo.";
+  "Producimos merch a medida en nuestra propia fábrica: controlamos cada prenda — tela, corte, estampado y acabado — para que tu marca se vea tan bien como la imaginaste.";
 
 export function AboutSection() {
   const headingRef = useRef<HTMLParagraphElement>(null);
@@ -228,9 +228,9 @@ export function AboutSection() {
     };
   }, []);
 
-  const firstPart = "Hacemos sitios que se ven y se sienten como nadie más.";
+  const firstPart = "Hacemos prendas que se ven y se sienten como nadie más.";
   const secondPart =
-    " Cada proyecto nace de entender tu visión, tu mercado y lo que te hace distinto. Diseño, código y motion como una sola pieza — sin plantillas, sin atajos, sin compromisos.";
+    " Cada pedido nace de entender tu marca, tu público y lo que te hace distinto. Diseño, tela y producción como una sola pieza — sin plantillas, sin atajos, sin compromisos.";
 
   return (
     <section
@@ -242,11 +242,11 @@ export function AboutSection() {
       <div data-nav-theme="light" className="pointer-events-none absolute inset-x-0 top-0 h-[28%]" aria-hidden="true" />
       <div data-nav-theme="light" className="pointer-events-none absolute inset-x-0 top-[28%] bottom-0" aria-hidden="true" />
 
-      {/* Why Aymacode heading — guardado para después
+      {/* Why Buho heading — guardado para después
       <div className="relative mx-auto max-w-[1500px] px-6 md:px-12 pt-4 md:pt-6 pb-16 md:pb-24">
         <div className="grid grid-cols-1 md:grid-cols-[0.2fr_0.8fr] gap-x-8 items-start">
           <p className="m-0 mb-6 md:mb-0 font-medium" style={{ fontSize: "clamp(14px, 1.1vw, 18px)", letterSpacing: "-0.01em", color: "#000000", fontFamily: 'var(--font-plus-jakarta), "Plus Jakarta Sans", sans-serif' }}>
-            Why Aymacode
+            Why Buho
           </p>
           <p ref={headingRef} className="m-0 font-display font-medium" style={{ fontSize: "clamp(22px, 2.3vw, 42px)", lineHeight: 1.15, letterSpacing: "-0.02em", color: "#000000" }}>
             {firstPart} {secondPart}
@@ -283,7 +283,7 @@ export function AboutSection() {
             color: "#000000",
           }}
         >
-          creative studio
+          textile lab
         </div>
 
         {/* Logo grande — mitad izquierda, centrado verticalmente */}
@@ -299,7 +299,7 @@ export function AboutSection() {
         >
           <Image
             src="/images/logo-black.png"
-            alt="Aymacode"
+            alt="Buho"
             fill
             className="object-contain"
           />
