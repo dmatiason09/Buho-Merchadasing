@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Fuente de marca Buho (la misma de Buho Shop): AG Schoolbook Medium. */
+@font-face {
+  font-family: "AG Schoolbook";
+  src: url("/fonts/ag-schoolbook-medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "Universo";
   src: url("/fonts/Fontspring-DEMO-universo-black.otf") format("opentype");
@@ -171,6 +180,40 @@ nextjs-portal {
     opacity: 0.9;
     transform: translate(-50%, -50%) scale(1.1);
   }
+}
+
+/* ============================================================
+   Preloader — revelado de la palabra "Buho" (idéntico al wordmark
+   de Buho Shop): cada letra sube desde su máscara con stagger.
+   ============================================================ */
+@keyframes preloader-letter-rise {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.preloader-letter {
+  display: inline-block;
+  will-change: transform;
+}
+/* Estado previo (antes de disparar / fuente cargando): oculta bajo la máscara. */
+.preloader-letter-idle {
+  transform: translateY(100%);
+}
+/* Animación por letra (el delay de cada una va inline → salen una tras otra). */
+.preloader-letter-play {
+  animation: preloader-letter-rise 0.7s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+/* Salida (reverso): la letra cae de vuelta dentro de su máscara, rápido. */
+@keyframes preloader-letter-fall {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
+.preloader-letter-exit {
+  animation: preloader-letter-fall 0.3s cubic-bezier(0.32, 0, 0.67, 0) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .preloader-letter-play { animation: none; }
+  .preloader-letter-exit { animation: none; }
+  .preloader-letter-idle { transform: none; }
 }
 
 /* ============================================================

@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, IBM_Plex_Mono, DM_Sans, Anton } from "next/font/goog
 import { SmoothScrollProvider } from "@/components/layout/SmoothScrollProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import { ChunkReloader } from "@/components/effects/ChunkReloader";
+import { Preloader } from "@/components/effects/Preloader";
 import { PageTransition } from "@/components/effects/PageTransition";
 import { TransitionProvider } from "@/providers/TransitionProvider";
 import { TransitionOverlay } from "@/components/effects/TransitionOverlay";
@@ -84,6 +85,7 @@ export default function RootLayout({
     >
       <body>
         <ChunkReloader />
+        <Preloader />
         <TransitionProvider>
           <Navbar />
           <SmoothScrollProvider>{children}</SmoothScrollProvider>
