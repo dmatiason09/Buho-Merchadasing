@@ -56,13 +56,13 @@ const FAQ_ITEMS: Array<{ q: string; a: string }> = [
 ];
 
 // Paleta tomada visualmente de douglus.site/contact
-const COLOR_BG = "#ffffff";                           // blanco — fondo de la zona derecha (formulario)
-const COLOR_BROWN = "#5b3a27";                         // marrón de marca — fondo de la zona izquierda
-const COLOR_FG = "#0A0A0A";                           // negro casi puro para textos del form (sobre blanco)
-const COLOR_ON_DARK = "#F5F1E8";                      // crema — palabras grandes + FAQ (sobre marrón)
-const COLOR_MUTED = "rgba(10, 10, 10, 0.55)";          // labels EMAIL/PHONE/BASED (sobre blanco)
-const COLOR_RULE = "rgba(10, 10, 10, 0.14)";           // separadores del form (sobre blanco)
-const COLOR_RULE_DARK = "rgba(245, 241, 232, 0.22)";   // separadores del FAQ (sobre marrón)
+const COLOR_BG = "#5b3a27";                            // marrón de marca — fondo de la zona DERECHA (formulario)
+const COLOR_LEFT_BG = "#ffffff";                       // blanco — fondo de la zona IZQUIERDA (palabras + FAQ)
+const COLOR_FG = "#F5F1E8";                            // crema — textos del form (sobre marrón)
+const COLOR_LEFT = "#2A2A2A";                          // gris oscuro — palabras grandes + FAQ (sobre blanco)
+const COLOR_MUTED = "rgba(245, 241, 232, 0.6)";        // labels + flecha del form (sobre marrón)
+const COLOR_RULE = "rgba(245, 241, 232, 0.28)";        // separadores del form (sobre marrón)
+const COLOR_LEFT_RULE = "rgba(10, 10, 10, 0.14)";      // separadores del FAQ (sobre blanco)
 
 type SubmitStatus =
   | { state: "idle" }
@@ -71,12 +71,12 @@ type SubmitStatus =
   | { state: "error"; message: string };
 
 const inputBase =
-  "w-full bg-transparent border-b py-3 text-[22px] font-normal tracking-[-0.02em] placeholder:text-black/35 focus:outline-none transition-colors";
+  "w-full bg-transparent border-b py-3 text-[22px] font-normal tracking-[-0.02em] placeholder:text-white/40 focus:outline-none transition-colors";
 
 const labelClass =
   "block mb-2 text-[11px] uppercase tracking-[0.18em]";
 const labelStyle = {
-  color: "rgba(10, 10, 10, 0.55)",
+  color: "rgba(245, 241, 232, 0.6)",
   fontFamily:
     'var(--font-plex-mono), "IBM Plex Mono", ui-monospace, monospace',
 };
@@ -180,8 +180,8 @@ export function ContactHero() {
       className="ch-root relative min-h-[100dvh] w-full flex flex-col"
       style={{ backgroundColor: COLOR_BG, color: COLOR_FG }}
     >
-      {/* Fondo MARRÓN de marca SOLO en la zona izquierda (palabras grandes + FAQ).
-          La derecha (formulario) queda en blanco (COLOR_BG de la sección)
+      {/* Fondo BLANCO SOLO en la zona izquierda (palabras grandes + FAQ).
+          La derecha (formulario) queda en marrón de marca (COLOR_BG de la sección)
           → división por color, sin línea visible.
           Ancho = padding-left (40) + columna 1 (3.5fr de 5fr) + gap completo (32). */}
       <div
@@ -190,7 +190,7 @@ export function ContactHero() {
         style={{
           width:
             "calc((100% - 80px - 1px - 64px) * 3.5 / 5 + 40px + 32px)",
-          backgroundColor: COLOR_BROWN,
+          backgroundColor: COLOR_LEFT_BG,
           zIndex: 0,
         }}
       />
@@ -201,7 +201,7 @@ export function ContactHero() {
       {/* Grid combinado: palabras + FAQ en col izq, form sticky en col der */}
       <div className="relative grid grid-cols-1 md:grid-cols-[minmax(0,3.5fr)_1px_minmax(0,1.5fr)] gap-x-8 px-6 md:px-10">
         {/* === Columna izquierda: palabras grandes + FAQ === */}
-        <div style={{ gridColumn: 1, backgroundColor: COLOR_BROWN }} className="flex flex-col min-w-0">
+        <div style={{ gridColumn: 1, backgroundColor: COLOR_LEFT_BG }} className="flex flex-col min-w-0">
           {/* Sub-grid de 4 rows para las palabras grandes (altura: 1 viewport) */}
           <div className="grid grid-rows-4 gap-y-5 h-[calc(100dvh-80px)] min-h-0">
             {BIG_WORDS.map((word, i) => (
@@ -222,7 +222,7 @@ export function ContactHero() {
                     lineHeight: 0.85,
                     fontWeight: 800,
                     letterSpacing: "-0.03em",
-                    color: COLOR_ON_DARK,
+                    color: COLOR_LEFT,
                     fontFamily:
                       'var(--font-plus-jakarta), "Plus Jakarta Sans", sans-serif',
                   }}
@@ -296,7 +296,7 @@ export function ContactHero() {
                   {...register("name")}
                 />
                 {errors.name && (
-                  <p className="mt-1 text-[11px]" style={{ color: "#B82D2D" }}>
+                  <p className="mt-1 text-[11px]" style={{ color: "#F2A8A8" }}>
                     {errors.name.message}
                   </p>
                 )}
@@ -340,7 +340,7 @@ export function ContactHero() {
                 {...register("email")}
               />
               {errors.email && (
-                <p className="mt-1 text-[11px]" style={{ color: "#B82D2D" }}>
+                <p className="mt-1 text-[11px]" style={{ color: "#F2A8A8" }}>
                   {errors.email.message}
                 </p>
               )}
@@ -371,7 +371,7 @@ export function ContactHero() {
                 ))}
               </select>
               {errors.serviceType && (
-                <p className="mt-1 text-[11px]" style={{ color: "#B82D2D" }}>
+                <p className="mt-1 text-[11px]" style={{ color: "#F2A8A8" }}>
                   {errors.serviceType.message}
                 </p>
               )}
@@ -394,7 +394,7 @@ export function ContactHero() {
                 {...register("message")}
               />
               {errors.message && (
-                <p className="mt-1 text-[11px]" style={{ color: "#B82D2D" }}>
+                <p className="mt-1 text-[11px]" style={{ color: "#F2A8A8" }}>
                   {errors.message.message}
                 </p>
               )}
@@ -421,12 +421,12 @@ export function ContactHero() {
             </button>
 
             {status.state === "success" && (
-              <p role="status" className="text-[12px]" style={{ color: "#2D7A3E" }}>
+              <p role="status" className="text-[12px]" style={{ color: "#A8E0B4" }}>
                 ✓ {status.message}
               </p>
             )}
             {status.state === "error" && (
-              <p role="alert" className="text-[12px]" style={{ color: "#B82D2D" }}>
+              <p role="alert" className="text-[12px]" style={{ color: "#F2A8A8" }}>
                 ✗ {status.message}
               </p>
             )}
@@ -457,7 +457,7 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
   return (
     <div
       className="border-b"
-      style={{ borderColor: COLOR_RULE_DARK }}
+      style={{ borderColor: COLOR_LEFT_RULE }}
     >
       <button
         type="button"
@@ -473,7 +473,7 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
         <span
           className="font-medium leading-tight"
           style={{
-            color: COLOR_ON_DARK,
+            color: COLOR_LEFT,
             fontSize: "clamp(16px, 1.35vw, 22px)",
             letterSpacing: "-0.01em",
           }}
@@ -484,7 +484,7 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
           aria-hidden="true"
           className="ml-4 shrink-0 transition-transform duration-300"
           style={{
-            color: COLOR_ON_DARK,
+            color: COLOR_LEFT,
             fontSize: "clamp(20px, 1.5vw, 26px)",
             transform: open ? "rotate(45deg)" : "rotate(0deg)",
             lineHeight: 1,
@@ -502,7 +502,7 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
         <p
           className="pb-6 max-w-[60ch] leading-relaxed"
           style={{
-            color: COLOR_ON_DARK,
+            color: COLOR_LEFT,
             opacity: 0.8,
             fontSize: "clamp(14px, 1vw, 16px)",
             fontFamily: 'var(--font-dm-sans), "DM Sans", sans-serif',
